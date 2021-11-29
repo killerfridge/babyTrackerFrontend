@@ -85,6 +85,7 @@ const lastFed = () => {
         }
       }
     } catch {
+      millisecsSinceStart.value = 0
       console.log("Error")
     }
   }, 1000)

@@ -72,7 +72,8 @@ async function getSleep(){
 
 const lastSlept = () =>{
   const timer = setInterval(()=> {
-    const lastSleptDate = new Date(getSleepState.value.sleep_end)
+    try{
+          const lastSleptDate = new Date(getSleepState.value.sleep_end)
     if (isNaN(lastSleptDate.getTime())) {
       return null
     } else {
@@ -85,6 +86,10 @@ const lastSlept = () =>{
         const sleepStartDate = new Date(getSleepState.value.sleep_start)
         currentSleepLength.value = Date.now() - sleepStartDate
       }
+    }
+    } catch {
+      millisecsSinceStart.value = 0
+      console.log("No Sleeps Logged!")
     }
   }, 1000)
 }
