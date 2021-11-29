@@ -9,7 +9,7 @@ const password1 = ref('')
 const password2 = ref('')
 const errors = ref([])
 
-const fullUrl = url + "users"
+const fullUrl = url + "users/"
 
 async function createUser(){
 

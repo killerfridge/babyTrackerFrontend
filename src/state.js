@@ -53,7 +53,7 @@ export default function useState () {
         isSignUp.value = !isSignUp.value
     }
 
-    const url = 'http://localhost:8000/'
+    const url = 'https://guildford-babytracker-backend.herokuapp.com/'
 
     return {
         initializeState,

@@ -4,8 +4,8 @@ import useState from "../state";
 import BabyWindow from "./BabyWindow.vue";
 import CreateBaby from "./CreateBaby.vue";
 
-const {getAuthHeader} = useState()
-const url = 'http://localhost:8000/babies/'
+const {getAuthHeader, url} = useState()
+const fullUrl = url + "babies"
 
 const babies = ref([{}])
 const getBaby = () =>{
@@ -17,7 +17,7 @@ function setBaby(t){
 }
 
 async function loadBaby(){
-  await fetch(url, {
+  await fetch(fullUrl, {
     headers: getAuthHeader.value
   }).then(response => {
     if (response.status === 200){

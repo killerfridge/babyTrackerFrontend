@@ -3,19 +3,19 @@ import {ref} from "vue";
 import useState from "../state";
 import SignUp from "./SignUp.vue";
 
-const {setToken, getAuthenticationStatus, removeToken, switchSignUp, getSignUp} = useState()
+const {setToken, getAuthenticationStatus, removeToken, switchSignUp, getSignUp, url} = useState()
 
 const username = ref('')
 const password = ref('')
 
-const url = 'http://localhost:8000/login'
+const fullUrl = url + 'login/'
 
 async function loginUser(){
   let form = new FormData
   form.append('username', username.value)
   form.append('password', password.value)
 
-  await fetch(url, {
+  await fetch(fullUrl, {
     method: 'POST',
     body: form
   }).then(response => {
