@@ -67,10 +67,10 @@ async function getFeed(){
 }
 
 
-const lastFed = () =>{
-  const timer = setInterval(()=> {
-    try{
-        const lastFedDate = new Date(getFeedState.value.feed_end)
+const lastFed = () => {
+  const timer = setInterval(() => {
+    try {
+      const lastFedDate = new Date(getFeedState.value.feed_end)
       if (isNaN(lastFedDate.getTime())) {
         return null
       } else {
@@ -79,14 +79,16 @@ const lastFed = () =>{
         secsSinceStart.value = Math.floor(delta / 1000) % 60
         minsSinceStart.value = Math.floor(delta / 1000 / 60) % 60
         hoursSinceStart.value = Math.floor(delta / 1000 / 60 / 60)
-        if (getFeedState.value.feed_start){
+        if (getFeedState.value.feed_start) {
           const feedStartDate = new Date(getFeedState.value.feed_start)
           currentFeedLength.value = Date.now() - feedStartDate
         }
       }
     } catch {
-      console.log("Error")}
+      console.log("Error")
+    }
   }, 1000)
+}
 
 
 const getTimeSinceFeed = computed(()=>{
