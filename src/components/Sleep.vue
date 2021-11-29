@@ -66,7 +66,7 @@ const lastSlept = () =>{
     if (isNaN(lastSleptDate.getTime())) {
       return null
     } else {
-      const delta = Date.now() - lastSleptDate
+      const delta = Math.max(0, Date.now() - lastSleptDate)
       millisecsSinceStart.value = delta
       secsSinceStart.value = Math.floor(delta / 1000) % 60
       minsSinceStart.value = Math.floor(delta / 1000 / 60) % 60

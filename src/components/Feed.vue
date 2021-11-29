@@ -66,7 +66,7 @@ const lastFed = () =>{
     if (isNaN(lastFedDate.getTime())) {
       return null
     } else {
-      const delta = Date.now() - lastFedDate
+      const delta = Math.max(0, Date.now() - lastFedDate)
       millisecsSinceStart.value = delta
       secsSinceStart.value = Math.floor(delta / 1000) % 60
       minsSinceStart.value = Math.floor(delta / 1000 / 60) % 60
