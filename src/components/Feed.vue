@@ -73,8 +73,7 @@ const lastFed = () =>{
       hoursSinceStart.value = Math.floor(delta / 1000 / 60 / 60)
       if (getFeedState.value.feed_start){
         const feedStartDate = new Date(getFeedState.value.feed_start)
-        const new_delta = Date.now() - feedStartDate
-        currentFeedLength.value = new_delta
+        currentFeedLength.value = Date.now() - feedStartDate
       }
     }
   }, 1000)
@@ -99,22 +98,21 @@ onMounted(()=>{
 
 <template>
 
-    <div class="h-32 p-3 transition-all">
+    <div class="h-60 p-3 transition-all">
       <div
           @click="feedBaby"
-          :class="baby.is_feeding ? 'bg-blue-500' : 'bg-green-500'"
-          class="transition-all shadow-lg rounded-lg h-full w-full flex items-center justify-center">
+          :class="baby.is_feeding ? 'bg-indigo-100' : 'bg-green-500 text-white'"
+          class="transition-all shadow-lg rounded-lg cursor-pointer h-full w-full flex items-center justify-center text-xl">
         <div v-if="baby.is_feeding">
-          <h1>Baby is Feeding!</h1>
+          <p>{{baby.name}} is <b>Feeding!</b></p>
           <p>Current Feed Duration: {{getTimeSinceStart}}</p>
         </div>
         <div v-else>
-          <h1>Baby is Fed!</h1>
+          <p>{{baby.name}} is <b>Fed!</b></p>
           <p>Last Fed {{getTimeSinceFeed}} ago</p>
           <p>Last Feed Duration: {{formatLength(getFeedState.feed_length * 1000)}}</p>
         </div>
       </div>
-
     </div>
 
 </template>

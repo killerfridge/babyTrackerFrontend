@@ -16,7 +16,8 @@ const props = defineProps({
   <div class="w-screen h-screen p-2">
     <div class="border-2 border-indigo-100 w-full h-full">
       <h1 class="font-extrabold uppercase text-4xl mt-3">{{baby.name}}</h1>
-      <Feed v-if="getAuthenticationStatus" :baby="baby"/>
+      <Feed v-if="getAuthenticationStatus" :baby="baby" />
+      <Sleep v-if="getAuthenticationStatus" :baby="baby" />
     </div>
   </div>
 
