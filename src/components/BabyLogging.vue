@@ -37,7 +37,9 @@ function viewBaby(){
 </script>
 
 <template>
-  <BabyWindow v-if="babies.length > 0" v-for="baby in babies" :baby="baby" :key="baby.id"/>
+  <div class="flex items-center justify-center">
+    <BabyWindow v-if="babies.length > 0" v-for="baby in babies" :baby="baby" :key="baby.id"/>
+  </div>
   <CreateBaby />
 </template>
 

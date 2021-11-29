@@ -4,6 +4,7 @@ import axios from "axios";
 const isAuthenticated = ref(false)
 const token = ref('')
 const authHeader = ref({})
+const isSignUp = ref(false)
 
 export default function useState () {
     const initializeState = () => {
@@ -44,6 +45,14 @@ export default function useState () {
         return authHeader.value
     })
 
+    const getSignUp = computed(()=>{
+        return isSignUp.value
+    })
+
+    const switchSignUp = () => {
+        isSignUp.value = !isSignUp.value
+    }
+
     const url = 'http://localhost:8000/'
 
     return {
@@ -53,7 +62,9 @@ export default function useState () {
         getAuthenticationStatus,
         removeToken,
         getAuthHeader,
-        url
+        url,
+        getSignUp,
+        switchSignUp
     }
 
 }

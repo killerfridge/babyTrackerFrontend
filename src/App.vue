@@ -3,6 +3,7 @@
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 import HelloWorld from './components/HelloWorld.vue'
 import Login from "./components/Login.vue";
+import SignUp from "./components/SignUp.vue";
 import BabyLogging from "./components/BabyLogging.vue";
 import {onMounted} from "vue";
 import useState from "./state";
@@ -15,7 +16,6 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="h-8"></div>
   <Login />
   <BabyLogging v-if="getAuthenticationStatus" />
 </template>
