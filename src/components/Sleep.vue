@@ -41,9 +41,19 @@ async function sleepBaby(){
   }).then(response => {
     if (response.status === 200){
       return response.json()
+    } else {
+      return null
     }
-  }).then(data => setSleepState(data))
-      .catch(error => console.log)
+  }).then(data => {
+    if (data) {
+      setSleepState(data)
+    } else {
+      setSleepState({
+        sleep_end: Date.now(),
+        sleep_start: Date.now(),
+        sleep_length: 0
+      })
+    }}).catch(error => console.log)
   currentSleepLength.value = 0
   millisecsSinceStart.value = 0
   changeIsSleeping()

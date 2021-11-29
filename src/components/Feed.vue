@@ -41,6 +41,12 @@ async function feedBaby(){
   }).then(response => {
     if (response.status === 200){
       return response.json()
+    } else {
+      return {
+        feed_start: Date.now(),
+        feed_end: Date.now(),
+        feed_length: 0
+      }
     }
   }).then(data => setFeedState(data))
       .catch(error => console.log)
