@@ -8,9 +8,9 @@ const props = defineProps(
 )
 
 const feedState = ref({
-  feed_end: '',
-  feed_start: '',
-  feed_length: '',
+  feed_end: Date.now(),
+  feed_start: Date.now(),
+  feed_length: 0,
 })
 const minsSinceStart = ref(0)
 const hoursSinceStart = ref(0)

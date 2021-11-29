@@ -8,9 +8,9 @@ const props = defineProps(
 )
 
 const sleepState = ref({
-  sleep_end: '',
-  sleep_start: '',
-  sleep_length: '',
+  sleep_end: Date.now(),
+  sleep_start: Date.now(),
+  sleep_length: 0,
 })
 const minsSinceStart = ref(0)
 const hoursSinceStart = ref(0)
