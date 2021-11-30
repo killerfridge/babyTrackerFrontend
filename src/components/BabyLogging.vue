@@ -4,10 +4,13 @@ import useState from "../state";
 import BabyWindow from "./BabyWindow.vue";
 import CreateBaby from "./CreateBaby.vue";
 
-const {getAuthHeader, url} = useState()
-const fullUrl = url + "babies"
+const {getAuthHeader, url, loadBaby, getBaby} = useState()
+const fullUrl = url + "babies/"
+const babies = ref({
+  'babies': []
+})
 
-const babies = ref([{}])
+/*const babies = ref([{}])
 const getBaby = () =>{
   return babies.value
 }
@@ -17,30 +20,44 @@ function setBaby(t){
 }
 
 async function loadBaby(){
+  console.log(getAuthHeader.value)
   await fetch(fullUrl, {
     headers: getAuthHeader.value
   }).then(response => {
     if (response.status === 200){
       console.log("Authenticated!")
       return response.json()
+    } else {
+      return null
     }
-  }).then(data => setBaby(data))
+  }).then(data => {
+    if (data) {
+      setBaby(data)
+    } else {
+      return null
+    }
+  })
+}*/
+
+const babyUpdater = () =>{
+  const timer = setInterval(async ()=>{
+    loadBaby()
+  }, 5000)
 }
 
 onMounted(()=>{
   loadBaby()
+  babyUpdater()
 })
 
-function viewBaby(){
-  console.log(getBaby())
-}
 </script>
 
 <template>
-  <div class="flex items-center justify-center">
-    <BabyWindow v-if="babies.length > 0" v-for="baby in babies" :baby="baby" :key="baby.id"/>
+  <div class="flex flex-col items-center justify-center">
+    <BabyWindow v-if="getBaby.length > 0" v-for="baby in getBaby.sort((a, b)=>(a.id - b.id))" :baby="baby" :key="baby.id"/>
+    <CreateBaby />
   </div>
-  <CreateBaby />
+
 </template>
 
 <script>

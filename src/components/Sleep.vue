@@ -116,7 +116,7 @@ onMounted(()=>{
       <div
           @click="sleepBaby"
           :class="baby.is_awake ? 'bg-green-500 text-white' : 'bg-indigo-100'"
-          class="transition-all shadow-lg cursor-pointer rounded-lg h-full w-full flex items-center justify-center text-xl">
+          class="transition-all shadow-md cursor-pointer rounded-lg h-full w-full flex items-center justify-center text-xl">
         <div v-if="baby.is_awake">
           <p>Yay! {{ baby.name }} is <b>Awake!</b></p>
           <p>Time Awake: {{getTimeSinceSleep}}</p>

@@ -115,7 +115,7 @@ onMounted(()=>{
       <div
           @click="feedBaby"
           :class="baby.is_feeding ? 'bg-indigo-100' : 'bg-green-500 text-white'"
-          class="transition-all shadow-lg rounded-lg cursor-pointer h-full w-full flex items-center justify-center text-xl">
+          class="transition-all shadow-md rounded-lg cursor-pointer h-full w-full flex items-center justify-center text-xl">
         <div v-if="baby.is_feeding">
           <p>{{baby.name}} is <b>Feeding!</b></p>
           <p>Current Feed Duration: {{getTimeSinceStart}}</p>

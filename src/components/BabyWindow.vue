@@ -1,6 +1,7 @@
 <script setup>
 import Feed from "./Feed.vue";
 import Sleep from "./Sleep.vue";
+import Temperature from "./Temperature.vue";
 import useState from "../state";
 
 const {getAuthenticationStatus} = useState()
@@ -18,6 +19,7 @@ const props = defineProps({
       <h1 class="font-extrabold uppercase text-4xl mt-3">{{baby.name}}</h1>
       <Feed v-if="getAuthenticationStatus" :baby="baby" />
       <Sleep v-if="getAuthenticationStatus" :baby="baby" />
+      <Temperature />
     </div>
   </div>
 

@@ -5,6 +5,8 @@ const isAuthenticated = ref(false)
 const token = ref('')
 const authHeader = ref({})
 const isSignUp = ref(false)
+const tempExpanded = ref(false)
+const loading =  ref(false)
 
 export default function useState () {
     const initializeState = () => {
@@ -21,7 +23,6 @@ export default function useState () {
         isAuthenticated.value = true
         axios.defaults.headers.common["Authorization"] = 'Bearer ' + t;
         authHeader.value = {Authorization: 'Bearer ' + t}
-        console.log(axios.defaults.headers)
         localStorage.setItem('token', t)
     }
 
@@ -53,7 +54,68 @@ export default function useState () {
         isSignUp.value = !isSignUp.value
     }
 
-    const url = 'https://guildford-babytracker-backend.herokuapp.com/'
+    const getTempState = computed(()=>{
+        return tempExpanded.value
+    })
+
+    const closeTemp = () => {
+        tempExpanded.value = false
+    }
+
+    const openTemp = () => {
+        tempExpanded.value = true
+    }
+
+    const switchTemp = () => {
+        tempExpanded.value = !tempExpanded.value
+    }
+
+    const babies = ref({
+        'babies': []
+    })
+
+    const getBaby = computed(()=>{
+      return babies.value.babies
+    })
+
+    function setBaby(t){
+      babies.value.babies = t
+    }
+
+    function switchLoading(){
+        loading.value = !loading.value
+    }
+
+    function notLoading(){
+        loading.value = false
+    }
+
+    function isLoading(){
+        loading.value = true
+    }
+
+    async function loadBaby(){
+          const fullUrl = url + "babies/"
+          await fetch(fullUrl, {
+            headers: getAuthHeader.value
+          }).then(response => {
+            if (response.status === 200){
+              return response.json()
+            } else {
+              return null
+            }
+          }).then(data => {
+            if (data) {
+              setBaby(data)
+            } else {
+              setBaby([])
+            }
+          })
+        }
+
+
+    // const url = 'https://guildford-babytracker-backend.herokuapp.com/'
+    const url = import.meta.env.VITE_HOSTNAME
 
     return {
         initializeState,
@@ -64,7 +126,17 @@ export default function useState () {
         getAuthHeader,
         url,
         getSignUp,
-        switchSignUp
+        switchSignUp,
+        getTempState,
+        closeTemp,
+        openTemp,
+        switchTemp,
+        getBaby,
+        setBaby,
+        loadBaby,
+        loading,
+        isLoading,
+        notLoading
     }
 
 }

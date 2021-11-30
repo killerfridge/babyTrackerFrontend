@@ -3,7 +3,7 @@ import {ref} from "vue";
 import useState from "../state";
 import SignUp from "./SignUp.vue";
 
-const {setToken, getAuthenticationStatus, removeToken, switchSignUp, getSignUp, url} = useState()
+const {setToken, getAuthenticationStatus, removeToken, switchSignUp, getSignUp, url, isLoading, notLoading} = useState()
 
 const username = ref('')
 const password = ref('')
@@ -11,6 +11,7 @@ const password = ref('')
 const fullUrl = url + 'login/'
 
 async function loginUser(){
+  isLoading()
   let form = new FormData
   form.append('username', username.value)
   form.append('password', password.value)
@@ -31,6 +32,7 @@ async function loginUser(){
       removeToken()
     }
   })
+  notLoading()
 
 }
 
