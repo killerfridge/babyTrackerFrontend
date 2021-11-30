@@ -2,7 +2,7 @@
 import {ref, computed} from "vue";
 import useState from "../state";
 
-const {getAuthHeader, url, loadBaby} = useState()
+const {getAuthHeader, url, loadBaby, setBaby, getBaby, addBaby} = useState()
 
 const fullUrl = url + 'babies/'
 
@@ -31,24 +31,20 @@ async function createBaby(){
   })
   const auth = getAuthHeader.value
   auth["Content-Type"] = "application/json"
-  console.log(new_body)
   await fetch(fullUrl, {
     method: "POST",
     body: new_body,
     headers: auth
   }).then(response =>{
-    if (response.status !== 201){
+    if (response.status === 201){
+      switchShowCreate()
       return response.json()
     } else {
-      switchShowCreate()
       return null
     }
-  }).then(data =>{
-    if (data){
-      errors.value.errors.push(data)
-    }
-  })
-  await loadBaby()
+  }).then(data => addBaby(data))
+  .catch(error => errors.value.errors.push(error))
+  location.reload()
 }
 
 </script>
