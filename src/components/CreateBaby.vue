@@ -44,7 +44,7 @@ async function createBaby(){
     }
   }).then(data => addBaby(data))
   .catch(error => errors.value.errors.push(error))
-  location.reload()
+  //location.reload()
 }
 
 </script>

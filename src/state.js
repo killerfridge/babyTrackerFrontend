@@ -7,8 +7,15 @@ const authHeader = ref({})
 const isSignUp = ref(false)
 const tempExpanded = ref(false)
 const loading =  ref(false)
+const babies = ref({
+        'babies': []
+    })
 
 export default function useState () {
+
+    const setAuthentication = (t) =>{
+        isAuthenticated.value = t
+    }
 
     const initializeState = () => {
 
@@ -70,10 +77,6 @@ export default function useState () {
     const switchTemp = () => {
         tempExpanded.value = !tempExpanded.value
     }
-
-    const babies = ref({
-        'babies': []
-    })
 
     const getBaby = computed(()=>{
       return babies.value.babies
@@ -140,7 +143,8 @@ export default function useState () {
         loading,
         isLoading,
         notLoading,
-        addBaby
+        addBaby,
+        setAuthentication
     }
 
 }

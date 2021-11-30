@@ -6,11 +6,12 @@ import BabyLogging from "./components/BabyLogging.vue";
 import {onMounted, computed} from "vue";
 import useState from "./state";
 
-const {initializeState, getAuthenticationStatus, getAuthHeader, url, removeToken, isLoading, notLoading, loading} = useState()
+const {initializeState, setAuthentication, getAuthenticationStatus, getAuthHeader, url, removeToken, isLoading, notLoading, loading} = useState()
 
 const fullUrl = url + "login"
 
 async function authenticate() {
+  setAuthentication(false)
   isLoading()
   await fetch(fullUrl, {
     method: "GET",
