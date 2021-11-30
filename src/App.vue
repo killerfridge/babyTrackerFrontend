@@ -36,7 +36,7 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div v-if="!getLoading">
+  <div v-if="!getLoading" class="mb-5">
     <Login />
     <BabyLogging v-if="getAuthenticationStatus"/>
   </div>

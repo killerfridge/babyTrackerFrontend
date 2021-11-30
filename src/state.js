@@ -9,6 +9,7 @@ const tempExpanded = ref(false)
 const loading =  ref(false)
 
 export default function useState () {
+
     const initializeState = () => {
 
         if (localStorage.getItem('token')){
@@ -78,6 +79,10 @@ export default function useState () {
       return babies.value.babies
     })
 
+    const addBaby = (newBaby) =>{
+        babies.value.babies.push(newBaby)
+    }
+
     function setBaby(t){
       babies.value.babies = t
     }
@@ -95,8 +100,8 @@ export default function useState () {
     }
 
     async function loadBaby(){
-          const fullUrl = url + "babies/"
-          await fetch(fullUrl, {
+        const fullUrl = url + "babies/"
+        await fetch(fullUrl, {
             headers: getAuthHeader.value
           }).then(response => {
             if (response.status === 200){
@@ -111,10 +116,8 @@ export default function useState () {
               setBaby([])
             }
           })
-        }
+    }
 
-
-    // const url = 'https://guildford-babytracker-backend.herokuapp.com/'
     const url = import.meta.env.VITE_HOSTNAME
 
     return {
@@ -136,7 +139,8 @@ export default function useState () {
         loadBaby,
         loading,
         isLoading,
-        notLoading
+        notLoading,
+        addBaby
     }
 
 }

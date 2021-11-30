@@ -12,6 +12,7 @@ const sleepState = ref({
   sleep_start: Date.now(),
   sleep_length: 0,
 })
+
 const minsSinceStart = ref(0)
 const hoursSinceStart = ref(0)
 const secsSinceStart = ref(0)

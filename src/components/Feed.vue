@@ -66,7 +66,6 @@ async function getFeed(){
   .catch(error => console.log)
 }
 
-
 const lastFed = () => {
   const timer = setInterval(() => {
     try {
