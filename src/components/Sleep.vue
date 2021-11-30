@@ -53,7 +53,15 @@ async function sleepBaby(){
         sleep_start: Date.now(),
         sleep_length: 0
       })
-    }}).catch(error => console.log)
+    }}).catch(error => {
+    console.log(error)
+    setSleepState({
+        sleep_end: Date.now(),
+        sleep_start: Date.now(),
+        sleep_length: 0
+      }
+    )
+  })
   currentSleepLength.value = 0
   millisecsSinceStart.value = 0
   changeIsSleeping()
