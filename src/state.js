@@ -28,17 +28,17 @@ export default function useState () {
 
     const setToken = (t) => {
         token.value = t
-        isAuthenticated.value = true
-        axios.defaults.headers.common["Authorization"] = 'Bearer ' + t;
-        authHeader.value = {Authorization: 'Bearer ' + t}
-        localStorage.setItem('token', t)
+        setAuthentication(true);
+        // axios.defaults.headers.common["Authorization"] = 'Bearer ' + t;
+        authHeader.value = {Authorization: 'Bearer ' + t};
+        localStorage.setItem('token', t);
     }
 
     const removeToken = () =>{
         token.value = '';
-        isAuthenticated.value = false;
+        setAuthentication(false);
         authHeader.value = {Authorization: ''}
-        axios.defaults.headers.common["Authorization"] = '';
+        // axios.defaults.headers.common["Authorization"] = '';
         localStorage.setItem('token', '');
     };
 

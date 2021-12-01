@@ -20,6 +20,8 @@ async function authenticate() {
     if (response.status !== 200){
       console.log("Not Authenticated :'(")
       removeToken()
+    } else {
+      setAuthentication(true)
     }
   }).catch(errors => console.log(errors))
   notLoading()
