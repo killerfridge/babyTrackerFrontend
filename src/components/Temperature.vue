@@ -1,27 +1,108 @@
 <script setup>
-import {ref, computed} from "vue";
+import {ref, computed, onMounted} from "vue";
 
 import useState from "../state";
 
-const {closeTemp, openTemp} = useState()
+const {url, getAuthHeader} = useState()
+
+const props = defineProps(
+    {baby: Object}
+)
+
+const fullUrl = url + "temperatures/" + props.baby.id
+
 const tempState = ref(false)
+const previousTemperature = ref(0)
+const averageTemperature = ref(0)
+const newTemperature = ref(0)
+
+
+const getPreviousTemperature = computed(()=>{
+  return previousTemperature.value
+})
+
+const getAverageTemperature = computed(()=>{
+  return averageTemperature.value
+})
+
 const switchTemp = () =>{
   tempState.value = !tempState.value
+}
+
+const openTemp = () =>{
+  tempState.value = true
+}
+
+const closeTemp = () => {
+  tempState.value = false
 }
 
 const getTempState = computed(()=>{
   return tempState.value
 })
 
+const getOpenClose = computed(()=>{
+  if(getTempState.value){
+    return "Close"
+  } else {
+    return "Expand"
+  }
+})
+
+async function getTempData(){
+  await fetch(fullUrl,{
+    method: "GET",
+    headers: getAuthHeader.value
+  }).then(response => response.json())
+  .then(data =>{
+    if (data){
+      previousTemperature.value = data.Temperature.value
+      newTemperature.value = data.Temperature.value
+      averageTemperature.value = data.avg
+    }
+  }
+  ).catch(error => console.log)
+}
+
+async function postTempData(){
+  const new_temp = JSON.stringify({
+    value: newTemperature.value
+  })
+  const auth = getAuthHeader.value
+  auth["Content-Type"] = "application/json"
+  await fetch(fullUrl, {
+    method: "POST",
+    body: new_temp,
+    headers: auth
+  }).then(response => response.json())
+  .then(data => {
+    if (data){
+      previousTemperature.value = data.Temperature.value
+      averageTemperature.value = data.avg
+    }
+  }).catch(error => console.log)
+}
+
+onMounted(()=>{
+  getTempData()
+})
 
 </script>
 
 <template>
   <div class="p-3 h-full w-full">
     <div
-        @click="switchTemp" :class="getTempState ? 'h-60' : 'h-16'"
-        class="w-1/2 bg-red-300 rounded-md transition-all shadow-md flex items-center justify-center">
-      <p>Average Temperature 36.5&deg</p>
+        :class="getTempState ? 'h-60' : 'h-24'"
+        class="bg-red-400 text-white rounded-md transition-all shadow-md flex items-center justify-center relative">
+      <div :class="!getTempState ? '' : 'grid grid-cols-2 gap-4'" class="transition-transform text-sm md:text-lg">
+        <p>Previous <b>{{getPreviousTemperature}}&deg</b></p>
+        <p class="mb-3">Average <b>{{getAverageTemperature.toFixed(1)}}&deg</b></p>
+        <div v-if="getTempState" class="col-span-2">
+          <input type="number" min=30 max=50 class="text-black p-1 rounded-md text-center w-36 mb-3" step="0.1" v-model="newTemperature"/>
+          <div class="p-3 rounded-md bg-gray-100 text-black transition-all cursor-pointer" @click="postTempData">Submit</div>
+        </div>
+      </div>
+      <div class="w-full h-6 absolute bottom-0 bg-gray-100 rounded-b-md text-black cursor-pointer" @click="switchTemp" >{{ getOpenClose }}</div>
     </div>
   </div>
 
