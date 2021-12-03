@@ -43,7 +43,7 @@ const getTempState = computed(()=>{
 
 const getOpenClose = computed(()=>{
   if(getTempState.value){
-    return "Close"
+    return "Collapse"
   } else {
     return "Expand"
   }
@@ -98,8 +98,8 @@ onMounted(()=>{
         <p>Previous <b>{{getPreviousTemperature}}&deg</b></p>
         <p class="mb-3">Average <b>{{getAverageTemperature.toFixed(1)}}&deg</b></p>
         <div v-if="getTempState" class="col-span-2">
-          <input type="number" min=30 max=50 class="text-black p-1 rounded-md text-center w-36 mb-3" step="0.1" v-model="newTemperature"/>
-          <div class="p-3 rounded-md bg-gray-100 text-black transition-all cursor-pointer" @click="postTempData">Submit</div>
+          <input type="number" min=30 max=50 class="text-gray-900 p-1 rounded-md text-center w-36 mb-3" step="0.1" v-model="newTemperature"/>
+          <div class="p-3 h-12 rounded-md bg-gray-100 text-gray-900 transition-all cursor-pointer" @click="postTempData">Submit</div>
         </div>
       </div>
       <div class="w-full h-6 absolute bottom-0 bg-gray-100 rounded-b-md text-black cursor-pointer" @click="switchTemp" >{{ getOpenClose }}</div>

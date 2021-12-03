@@ -22,7 +22,7 @@ const props = defineProps({
       <Sleep v-if="getAuthenticationStatus" :baby="baby" />
       <div class="grid grid-cols-2">
         <Temperature :baby="baby" />
-        <Weight />
+        <Weight :baby="baby"/>
       </div>
     </div>
   </div>
