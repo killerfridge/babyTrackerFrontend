@@ -60,8 +60,10 @@
       if (data){
         weights.value.previousWeight = data.value
         weights.value.newWeight = data.value
+
       }
     }).catch(error => console.log)
+    switchWeightState()
   }
 
   onMounted(()=>{
