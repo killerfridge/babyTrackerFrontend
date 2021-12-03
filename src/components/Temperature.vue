@@ -81,6 +81,7 @@ async function postTempData(){
       averageTemperature.value = data.avg
     }
   }).catch(error => console.log)
+  closeTemp()
 }
 
 onMounted(()=>{
@@ -94,12 +95,12 @@ onMounted(()=>{
     <div
         :class="getTempState ? 'h-60' : 'h-24'"
         class="bg-red-400 text-white rounded-md transition-all shadow-md flex items-center justify-center relative">
-      <div :class="!getTempState ? '' : 'grid grid-cols-2 gap-4'" class="transition-transform text-sm md:text-lg">
+      <div :class="!getTempState ? '' : 'grid grid-cols-2 gap-4'" class="transition-transform text-sm md:text-lg justify-center">
         <p>Previous <b>{{getPreviousTemperature}}&deg</b></p>
         <p class="mb-3">Average <b>{{getAverageTemperature.toFixed(1)}}&deg</b></p>
-        <div v-if="getTempState" class="col-span-2">
+        <div v-if="getTempState" class="col-span-2 justify-center">
           <input type="number" min=30 max=50 class="text-gray-900 p-1 rounded-md text-center w-36 mb-3" step="0.1" v-model="newTemperature"/>
-          <div class="p-3 h-12 rounded-md bg-gray-100 text-gray-900 transition-all cursor-pointer" @click="postTempData">Submit</div>
+          <div class="p-3 h-12 w-36 mx-auto rounded-md bg-gray-100 text-gray-900 transition-all cursor-pointer" @click="postTempData">Submit</div>
         </div>
       </div>
       <div class="w-full h-6 absolute bottom-0 bg-gray-100 rounded-b-md text-black cursor-pointer" @click="switchTemp" >{{ getOpenClose }}</div>
