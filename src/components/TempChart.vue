@@ -30,6 +30,7 @@ const init = async () =>{
       autosize: true,
       yaxis: {
         automargin: true,
+        range: [25, 45]
       },
       xaxis: {
         automargin: true
