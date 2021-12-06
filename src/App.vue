@@ -56,4 +56,7 @@ onMounted(()=>{
   text-align: center;
   color: #2c3e50;
 }
+rect:hover{
+  fill: #065F46;
+}
 </style>

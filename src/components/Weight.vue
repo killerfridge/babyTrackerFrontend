@@ -82,7 +82,7 @@
       </div>
       <div v-if="getWeightState" class="flex-col flex mt-3 items-center justify-center">
         <input class="mb-3 rounded-md p-2 text-gray-900 text-center w-36" type="number" name="newWeight" :placeholder="getWeights.previousWeight" min="1" max="80" step=0.1 v-model="weights.newWeight" />
-        <div class="bg-gray-50 p-3 h-12 rounded-md text text-gray-900 cursor-pointer w-full" @click="postWeight">Submit</div>
+        <div class="bg-gray-50 p-3 h-12 w-36 rounded-md text text-gray-900 cursor-pointer w-full" @click="postWeight">Submit</div>
       </div>
       <div @click="switchWeightState" class="w-full h-6 absolute bottom-0 bg-gray-100 rounded-b-md text-black cursor-pointer">
         {{ getWeightState ? "Collapse" : "Expand" }}</div>
