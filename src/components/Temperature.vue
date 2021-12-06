@@ -12,9 +12,9 @@ const props = defineProps(
 const fullUrl = url + "temperatures/" + props.baby.id
 
 const tempState = ref(false)
-const previousTemperature = ref(0)
-const averageTemperature = ref(0)
-const newTemperature = ref(0)
+const previousTemperature = ref(36.5)
+const averageTemperature = ref(36.5)
+const newTemperature = ref(36.5)
 
 
 const getPreviousTemperature = computed(()=>{

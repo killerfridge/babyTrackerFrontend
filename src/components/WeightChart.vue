@@ -84,8 +84,13 @@ const init = async () => {
     const layout = {
       autosize: true,
       showlegend: false,
+      yaxis:{
+        automargin: true,
+        title: 'Weight (kg)'
+      },
       xaxis: {
-        scale: 'datetime'
+        scale: 'datetime',
+        title: 'Date'
       },
       margin: {
         l: 20,
@@ -100,8 +105,6 @@ const init = async () => {
       displayModeBar: false,
       responsive: true,
     }
-
-    console.log(trace)
 
     Plotly.newPlot(`weightChart${props.baby.id}`, trace, layout, config)
   }
