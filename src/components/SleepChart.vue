@@ -9,16 +9,21 @@ const props = defineProps({baby:Object})
 
 const fullUrl = url + "sleep/" + props.baby.id + "/plot"
 
+const range = (start, stop, step = 1) =>
+  Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
+
 const init = async () =>{
   const render = data => {
-  //TODO: complete the render function
     const xValue = d => d.sleep_start
-    const yValue = d => d.sleep_end
+    /*const yValue = d => d.sleep_end
     const length = d => d.sleep_length
     const xDay = d => new Date(xValue(d)).getDay()
-    const yTime = d => new Date(xValue(d)).getUTCHours()
+    const yTime = d => new Date(xValue(d)).getUTCHours()*/
 
     function getBars(data){
+
+      const awakeColor = 'rgba(1, 1, 1, 0.0)'
+      const asleepColor = '#10B981'
 
       const endData = {
         x: [],
@@ -43,8 +48,12 @@ const init = async () =>{
 
       for (let i = 0; i < data.length; i++){
         const date_start = new Date(data[i].sleep_start)
-        const date_end = new Date(data[i].sleep_end)
-        const sleep_length = data[i].sleep_length
+        let date_end = new Date(Date.now())
+        if (data[i].sleep_end){
+          date_end = new Date(data[i].sleep_end)
+        }
+
+        /*const sleep_length = data[i].sleep_length*/
         let awake_period = 0
         let sleep_period = 0
 
@@ -64,7 +73,7 @@ const init = async () =>{
             endData.x.push(new Date(awake_start.toDateString()))
             // the mins in day remainder for the previous day should be whatever is needed to fill up
             endData.y.push(mins_in_day)
-            endData.colors.push('red')
+            endData.colors.push(awakeColor)
             endData.name.push('awake')
             // the minutes awake
             awake_period = getFirstAwake(date_start)
@@ -77,19 +86,19 @@ const init = async () =>{
           sleep_period = mins_in_day
           endData.x.push(new Date(date_end.toDateString()))
           endData.y.push(getFirstAwake(date_end))
-          endData.colors.push('green')
+          endData.colors.push(asleepColor)
           endData.name.push('asleep')
           mins_in_day = 1440 - getFirstAwake(date_end)
         }
 
         endData.x.push(new Date(date_start.toDateString()))
         endData.y.push(awake_period)
-        endData.colors.push('red')
+        endData.colors.push(awakeColor)
         endData.name.push('awake')
 
         endData.x.push(new Date(date_start.toDateString()))
         endData.y.push(sleep_period)
-        endData.colors.push('green')
+        endData.colors.push(asleepColor)
         endData.name.push('asleep')
       }
 
@@ -116,22 +125,25 @@ const init = async () =>{
       barmode: 'stack',
       yaxis: {
         automargin: true,
-        scale: "datetime"
+        range: [0, 1440],
+        tickvals: range(0, 1441, 120),
+        ticktext: range(0, 1441, 120).map(t=>`${Math.round(t/60)}:00`),
+        title: "Time"
       },
       xaxis: {
+        automargin: true,
+        title: "Date"
       },
       margin: {
-        t:20,
+        t:40,
         b:20,
         l:20,
         r:20,
         pad:0
       },
-      autosize:true
+      autosize:true,
+      title: "Sleep Patterns"
     }
-
-    console.log(trace)
-
     Plotly.newPlot('sleepChartMain' + props.baby.id, trace, layout, config)
   }
 
@@ -160,8 +172,8 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="w-1/2 h-60" :id="'sleepChartMain' + baby.id"></div>
-  <div class="w-1/2 h-60" :id="'sleepChartSecondary' + baby.id"></div>
+  <div class="w-1/2 h-80" :id="'sleepChartMain' + baby.id"></div>
+  <div class="w-1/2 h-80" :id="'sleepChartSecondary' + baby.id"></div>
 </template>
 
 <script>

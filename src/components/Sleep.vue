@@ -2,7 +2,7 @@
 import useState from "../state";
 import {ref, computed, onMounted} from "vue";
 import {formatLength} from "../utils";
-
+const {url, getAuthHeader} = useState()
 const props = defineProps(
     {baby: Object}
 )
@@ -13,9 +13,7 @@ const sleepState = ref({
   sleep_length: 0,
 })
 
-const minsSinceStart = ref(0)
-const hoursSinceStart = ref(0)
-const secsSinceStart = ref(0)
+
 const millisecsSinceStart = ref(0)
 const currentSleepLength = ref(0)
 
@@ -31,7 +29,6 @@ const changeIsSleeping = () => {
   props.baby.is_awake = !props.baby.is_awake
 }
 
-const {url, getAuthHeader} = useState()
 
 const fullUrl = url + 'sleep/' + props.baby.id
 
@@ -79,28 +76,21 @@ async function getSleep(){
   .catch(error => console.log)
 }
 
-const lastSlept = () =>{
-  const timer = setInterval(()=> {
-    try{
-          const lastSleptDate = new Date(getSleepState.value.sleep_end)
-    if (isNaN(lastSleptDate.getTime())) {
-      return null
-    } else {
-      const delta = Math.max(0, Date.now() - lastSleptDate)
-      millisecsSinceStart.value = delta
-      secsSinceStart.value = Math.floor(delta / 1000) % 60
-      minsSinceStart.value = Math.floor(delta / 1000 / 60) % 60
-      hoursSinceStart.value = Math.floor(delta / 1000 / 60 / 60)
-      if (getSleepState.value.sleep_start){
+function sleepTimer(){
+  if (getSleepState.value.sleep_end) {
+      const lastSleptDate = new Date(getSleepState.value.sleep_end)
+      millisecsSinceStart.value = Math.max(0, Date.now() - lastSleptDate)
+    }
+    else if (getSleepState.value.sleep_start){
         const sleepStartDate = new Date(getSleepState.value.sleep_start)
         currentSleepLength.value = Date.now() - sleepStartDate
-      }
-    }
-    } catch {
+    } else {
       millisecsSinceStart.value = 0
-      console.log("No Sleeps Logged!")
     }
-  }, 1000)
+}
+
+const lastSlept = () =>{
+  const timer = setInterval(sleepTimer, 1000)
 }
 
 const getTimeSinceSleep = computed(()=>{
@@ -113,6 +103,7 @@ const getTimeSinceStart = computed(()=>{
 
 onMounted(()=>{
   if (props.baby.id){
+    sleepTimer()
     getSleep()
     lastSlept()
   }

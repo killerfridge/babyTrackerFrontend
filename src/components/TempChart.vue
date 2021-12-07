@@ -1,10 +1,28 @@
 <script setup>
 import * as Plotly from "plotly.js-dist-min"
 import useState from "../state";
-import {onMounted} from "vue";
+import {onMounted, ref, computed} from "vue";
 
 const {url, getAuthHeader} = useState()
 const props = defineProps({baby: Object})
+const chartLoaded = ref(false)
+const loading = ref(false)
+
+const getLoading = computed(()=>{
+  return loading.value
+})
+
+function changeLoading(bool) {
+  loading.value = bool
+}
+
+const getChartLoaded = computed(()=>{
+  return chartLoaded.value
+})
+
+const setChartLoaded = (bool) =>{
+  chartLoaded.value = bool
+}
 
 const fullUrl = url + "temperatures/" + props.baby.id + "/plot"
 
@@ -30,7 +48,8 @@ const init = async () =>{
       autosize: true,
       yaxis: {
         automargin: true,
-        range: [25, 45]
+        range: [30, 45],
+        title: "Temperature (C)"
       },
       xaxis: {
         automargin: true
@@ -52,6 +71,7 @@ const init = async () =>{
     headers: getAuthHeader.value
   }).then(response =>{
     if (response.status === 200){
+
       return response.json()
     } else {
       return null
@@ -60,18 +80,23 @@ const init = async () =>{
   .then(data => {
     if (data){
       render(data)
+      setChartLoaded(true)
     }
   }).catch(error => console.log)
 }
 
 onMounted(()=>{
+  changeLoading(true)
   init()
+  changeLoading(false)
 })
 
 </script>
 
 <template>
-  <div class="w-1/2 h-60" :id="'tempchart' + baby.id"></div>
+
+  <div class="w-1/2 h-80" :id="'tempchart' + baby.id"></div>
+
 </template>
 
 <script>

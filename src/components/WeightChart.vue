@@ -133,7 +133,7 @@ onMounted(()=>{
 </script>
 
 <template>
-    <div :id="'weightChart' + baby.id" class="w-1/2 h-60 rounded-md"></div>
+    <div :id="'weightChart' + baby.id" class="w-1/2 h-80 rounded-md"></div>
 </template>
 
 <script>
