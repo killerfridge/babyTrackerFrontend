@@ -1,6 +1,6 @@
 <script setup>
 import * as Plotly from 'plotly.js-dist-min'
-import {computed} from "vue";
+import {computed, onMounted} from "vue";
 import useState from "../state";
 
 const {url, getAuthHeader} = useState()
@@ -8,6 +8,154 @@ const {url, getAuthHeader} = useState()
 const props = defineProps({baby:Object})
 
 const fullUrl = url + "sleep/" + props.baby.id + "/plot"
+
+const init = async () =>{
+  const render = data => {
+  //TODO: complete the render function
+    const xValue = d => d.sleep_start
+    const yValue = d => d.sleep_end
+    const length = d => d.sleep_length
+    const xDay = d => new Date(xValue(d)).getDay()
+    const yTime = d => new Date(xValue(d)).getUTCHours()
+
+    function getBars(data){
+
+      const endData = {
+        x: [],
+        y: [],
+        colors: [],
+        name: []
+      }
+
+      function toMinutes(d){
+        return (d.getHours() * 60) + d.getMinutes()
+      }
+
+      function getDelta(d1, d2){
+        return toMinutes(d2) - toMinutes(d1)
+      }
+
+      function getFirstAwake(d1){
+        return (d1.getHours() * 60) + d1.getMinutes()
+      }
+
+      let mins_in_day = 1440
+
+      for (let i = 0; i < data.length; i++){
+        const date_start = new Date(data[i].sleep_start)
+        const date_end = new Date(data[i].sleep_end)
+        const sleep_length = data[i].sleep_length
+        let awake_period = 0
+        let sleep_period = 0
+
+        if (i === 0){
+          // If it is the first session logged, fill the first part of the bar
+          awake_period = getFirstAwake(date_start)
+          // mins in day will be for overflowing
+          mins_in_day -= awake_period
+        }else{
+          // create a bar to fill from the end of the previous sleep
+          // to the start of this one
+          const awake_start = new Date(data[i-1].sleep_end)
+          awake_period = getDelta(awake_start, date_start)
+          if (awake_period < 0){
+            // if the awake period is < 0 it indicates the sleep from the previous day
+            // went over midnight, and the awake start and end dates aren't the same
+            endData.x.push(new Date(awake_start.toDateString()))
+            // the mins in day remainder for the previous day should be whatever is needed to fill up
+            endData.y.push(mins_in_day)
+            endData.colors.push('red')
+            endData.name.push('awake')
+            // the minutes awake
+            awake_period = getFirstAwake(date_start)
+            mins_in_day = 1440
+          }
+          mins_in_day -= awake_period
+        }
+        sleep_period = getDelta(date_start, date_end)
+        if (sleep_period < 0){
+          sleep_period = mins_in_day
+          endData.x.push(new Date(date_end.toDateString()))
+          endData.y.push(getFirstAwake(date_end))
+          endData.colors.push('green')
+          endData.name.push('asleep')
+          mins_in_day = 1440 - getFirstAwake(date_end)
+        }
+
+        endData.x.push(new Date(date_start.toDateString()))
+        endData.y.push(awake_period)
+        endData.colors.push('red')
+        endData.name.push('awake')
+
+        endData.x.push(new Date(date_start.toDateString()))
+        endData.y.push(sleep_period)
+        endData.colors.push('green')
+        endData.name.push('asleep')
+      }
+
+      return endData
+    }
+
+    const chartData = getBars(data)
+
+    const trace = [{
+      x: chartData.x,
+      y: chartData.y,
+      type: 'bar',
+      marker: {
+        color: chartData.colors
+      }
+    }]
+
+    const config = {
+      responsive: true,
+      displayModeBar: false
+    }
+
+    const layout = {
+      barmode: 'stack',
+      yaxis: {
+        automargin: true,
+        scale: "datetime"
+      },
+      xaxis: {
+      },
+      margin: {
+        t:20,
+        b:20,
+        l:20,
+        r:20,
+        pad:0
+      },
+      autosize:true
+    }
+
+    console.log(trace)
+
+    Plotly.newPlot('sleepChartMain' + props.baby.id, trace, layout, config)
+  }
+
+  await fetch(fullUrl, {
+    method: "GET",
+    headers: getAuthHeader.value
+  }).then(response => {
+    if (response.status === 200){
+      return response.json()
+    } else {
+      return null
+    }
+  }).then(data => {
+    if (data){
+      render(data)
+    }
+  }).catch(error => console.log)
+
+
+}
+
+onMounted(()=>{
+  init()
+})
 
 </script>
 
