@@ -8,7 +8,7 @@ const {setToken, getAuthenticationStatus, removeToken, switchSignUp, getSignUp, 
 const username = ref('')
 const password = ref('')
 
-const fullUrl = url + 'login/'
+const fullUrl = url + 'login'
 
 async function loginUser(){
   isLoading()
