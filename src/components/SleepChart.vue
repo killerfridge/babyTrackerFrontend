@@ -108,8 +108,8 @@ const init = async () =>{
     const chartData = getBars(data)
 
     const trace = [{
-      x: chartData.x,
-      y: chartData.y,
+      y: chartData.x,
+      x: chartData.y,
       type: 'bar',
       marker: {
         color: chartData.colors
