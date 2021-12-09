@@ -68,11 +68,11 @@ const init = async () =>{
           const awake_start = new Date(data[i-1].sleep_end)
           awake_period = getDelta(awake_start, date_start)
           if (awake_period < 0){
+            endData.y.push(new Date(awake_start.toDateString()))
             // if the awake period is < 0 it indicates the sleep from the previous day
             // went over midnight, and the awake start and end dates aren't the same
-            endData.x.push(new Date(awake_start.toDateString()))
             // the mins in day remainder for the previous day should be whatever is needed to fill up
-            endData.y.push(mins_in_day)
+            endData.x.push(mins_in_day)
             endData.colors.push(awakeColor)
             endData.name.push('awake')
             // the minutes awake
@@ -84,20 +84,20 @@ const init = async () =>{
         sleep_period = getDelta(date_start, date_end)
         if (sleep_period < 0){
           sleep_period = mins_in_day
-          endData.x.push(new Date(date_end.toDateString()))
-          endData.y.push(getFirstAwake(date_end))
+          endData.y.push(new Date(date_end.toDateString()))
+          endData.x.push(getFirstAwake(date_end))
           endData.colors.push(asleepColor)
           endData.name.push('asleep')
           mins_in_day = 1440 - getFirstAwake(date_end)
         }
 
-        endData.x.push(new Date(date_start.toDateString()))
-        endData.y.push(awake_period)
+        endData.y.push(new Date(date_start.toDateString()))
+        endData.x.push(awake_period)
         endData.colors.push(awakeColor)
         endData.name.push('awake')
 
-        endData.x.push(new Date(date_start.toDateString()))
-        endData.y.push(sleep_period)
+        endData.y.push(new Date(date_start.toDateString()))
+        endData.x.push(sleep_period)
         endData.colors.push(asleepColor)
         endData.name.push('asleep')
       }
@@ -108,8 +108,8 @@ const init = async () =>{
     const chartData = getBars(data)
 
     const trace = [{
-      y: chartData.x,
-      x: chartData.y,
+      y: chartData.y,
+      x: chartData.x,
       type: 'bar',
       marker: {
         color: chartData.colors
@@ -133,7 +133,8 @@ const init = async () =>{
       },
       yaxis: {
         automargin: true,
-        title: "Date"
+        title: "Date",
+        tickformat: "%b-%d"
       },
       margin: {
         t:40,
