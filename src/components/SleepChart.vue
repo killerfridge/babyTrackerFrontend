@@ -134,7 +134,8 @@ const init = async () =>{
       yaxis: {
         automargin: true,
         title: "Date",
-        tickformat: "%b-%d"
+        tickformat: "%b-%d",
+        dtick: 1000 * 60 * 60 * 24,
       },
       margin: {
         t:40,
