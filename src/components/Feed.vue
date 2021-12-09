@@ -87,7 +87,7 @@ const lastFed = () => {
       millisecsSinceStart.value = 0
       console.log("Error")
     }
-  }, 5000)
+  }, 1000)
 }
 
 
