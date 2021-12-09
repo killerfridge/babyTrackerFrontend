@@ -113,7 +113,8 @@ const init = async () =>{
       type: 'bar',
       marker: {
         color: chartData.colors
-      }
+      },
+      orientation: 'h'
     }]
 
     const config = {
@@ -172,8 +173,8 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="w-1/2 h-80" :id="'sleepChartMain' + baby.id"></div>
-  <div class="w-1/2 h-80" :id="'sleepChartSecondary' + baby.id"></div>
+  <div class="w-full h-80" :id="'sleepChartMain' + baby.id"></div>
+  <div v-if="false" class="w-1/2 h-80" :id="'sleepChartSecondary' + baby.id"></div>
 </template>
 
 <script>
