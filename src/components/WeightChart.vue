@@ -89,8 +89,9 @@ const init = async () => {
         title: 'Weight (kg)'
       },
       xaxis: {
-        scale: 'datetime',
-        title: 'Date'
+        tickformat: '%b-%d',
+        title: 'Date',
+        dtick: 1000 * 60 * 60 * 24
       },
       margin: {
         l: 20,

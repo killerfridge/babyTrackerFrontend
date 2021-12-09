@@ -111,10 +111,15 @@ const init = async () =>{
       y: chartData.y,
       x: chartData.x,
       type: 'bar',
+      text: chartData.name,
       marker: {
         color: chartData.colors
       },
-      orientation: 'h'
+      orientation: 'h',
+      hovertemplate: '<b>%{x:.0f}</b> minutes %{text}' +
+          '<extra></extra>',
+      textposition: 'center',
+      uniformtext_mode: 'hide'
     }]
 
     const config = {
