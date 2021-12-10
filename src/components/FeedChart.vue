@@ -44,8 +44,8 @@ const init = async () =>{
       for (let i = 0; i < data.length; i++){
         const date_start = new Date(data[i].feed_start)
         let date_end = new Date(Date.now())
-        if (data[i].sleep_end){
-          date_end = new Date(data[i].sleep_end)
+        if (data[i].feed_end){
+          date_end = new Date(data[i].feed_end)
         }
 
         /*const sleep_length = data[i].sleep_length*/
@@ -60,7 +60,7 @@ const init = async () =>{
         }else{
           // create a bar to fill from the end of the previous sleep
           // to the start of this one
-          const feed_start = new Date(data[i-1].sleep_end)
+          const feed_start = new Date(data[i-1].feed_end)
           nofeed_period = getDelta(feed_start, date_start)
           if (nofeed_period < 0){
             endData.y.push(new Date(feed_start.toDateString()))
