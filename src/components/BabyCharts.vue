@@ -2,6 +2,7 @@
 import WeightChart from "./WeightChart.vue";
 import TempChart from "./TempChart.vue";
 import SleepChart from "./SleepChart.vue";
+import FeedChart from "./FeedChart.vue";
 
 const props = defineProps({baby:Object})
 </script>
@@ -13,6 +14,9 @@ const props = defineProps({baby:Object})
     </div>
     <div class="flex">
       <SleepChart :baby="baby" />
+    </div>
+    <div class="flex">
+      <FeedChart :baby="baby" />
     </div>
 
 </template>
