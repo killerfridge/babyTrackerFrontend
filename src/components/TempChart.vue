@@ -48,7 +48,7 @@ const init = async () =>{
       autosize: true,
       yaxis: {
         automargin: true,
-        range: [35, 40],
+        range: [35, 38],
         title: "Temperature (C)"
       },
       xaxis: {
