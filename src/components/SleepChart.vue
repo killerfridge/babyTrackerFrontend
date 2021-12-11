@@ -112,7 +112,11 @@ const init = async () =>{
       x: chartData.x,
       type: 'bar',
       marker: {
-        color: chartData.colors
+        color: chartData.colors,
+        line: {
+          width: 1,
+          color: 'white'
+        }
       },
       orientation: 'h',
       hovertemplate: '<b>%{x:.0f}</b> minutes' +
@@ -131,7 +135,8 @@ const init = async () =>{
         range: [0, 1440],
         tickvals: range(0, 1441, 120),
         ticktext: range(0, 1441, 120).map(t=>`${Math.round(t/60)}:00`),
-        title: "Time"
+        title: "Time",
+        zeroline: false
       },
       yaxis: {
         automargin: true,
