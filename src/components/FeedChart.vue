@@ -18,7 +18,7 @@ const init = async () =>{
     function getBars(data){
 
       const noFeedColor = 'rgba(1, 1, 1, 0.0)'
-      const feedColor = 'rgb(37 99 235)'
+      const feedColor = 'rgba(37 99 235, 0.7)'
 
       const endData = {
         x: [],

@@ -116,7 +116,8 @@ const init = async () =>{
         line: {
           width: 1,
           color: 'white'
-        }
+        },
+        opacity: 0.7
       },
       orientation: 'h',
       hovertemplate: '<b>%{x:.0f}</b> minutes' +
