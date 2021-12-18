@@ -135,8 +135,8 @@ const init = async () =>{
       xaxis: {
         automargin: true,
         range: [0, 1440],
-        tickvals: range(0, 1441, 120),
-        ticktext: range(0, 1441, 120).map(t=>`${Math.round(t/60)}:00`),
+        tickvals: range(0, 1441, 60),
+        ticktext: range(0, 1441, 60).map(t=>`${Math.round(t/60)}:00`),
         title: "Time",
         zeroline: false
       },
