@@ -22,7 +22,7 @@ const init = async () =>{
 
     function getBars(data){
 
-      const awakeColor = 'rgba(1, 1, 1, 0.0)'
+      const awakeColor = 'rgba(239, 68, 68, 0.2)'
       const asleepColor = '#10B981'
 
       const endData = {
