@@ -91,7 +91,6 @@ const init = async () => {
       xaxis: {
         tickformat: '%b-%d',
         title: 'Date',
-        dtick: 1000 * 60 * 60 * 24
       },
       margin: {
         l: 20,
