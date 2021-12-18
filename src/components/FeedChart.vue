@@ -125,6 +125,7 @@ const init = async () =>{
 
     const layout = {
       barmode: 'stack',
+      bargap: 0.01,
       xaxis: {
         automargin: true,
         range: [0, 1440],
