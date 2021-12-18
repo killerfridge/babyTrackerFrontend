@@ -7,6 +7,7 @@ import Weight from "./Weight.vue";
 import BabyCharts from "./BabyCharts.vue";
 import Settings from "./Settings.vue";
 import {ref, computed} from "vue";
+import Nappies from "./Nappies.vue";
 
 const {getAuthenticationStatus} = useState()
 
@@ -66,6 +67,7 @@ const switchSettingsView = () => {
       <h1 class="font-extrabold uppercase text-4xl mt-3">{{baby.name}}</h1>
       <Feed v-if="getAuthenticationStatus" :baby="baby" />
       <Sleep v-if="getAuthenticationStatus" :baby="baby" />
+      <Nappies v-if="getAuthenticationStatus" :baby="baby" />
       <div class="grid grid-cols-2">
         <Temperature :baby="baby" />
         <Weight :baby="baby"/>
