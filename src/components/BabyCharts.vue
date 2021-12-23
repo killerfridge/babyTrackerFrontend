@@ -8,9 +8,9 @@ const props = defineProps({baby:Object})
 </script>
 
 <template>
-    <div class="flex">
-      <WeightChart :baby="baby" />
-      <TempChart :baby="baby" />
+    <div class="block md:flex">
+      <WeightChart :baby="baby" class="block w-full md:w-1/2 h-80 md:flex"/>
+      <TempChart :baby="baby"  class="block w-full md:w-1/2 h-80 md:flex"/>
     </div>
     <div class="flex">
       <SleepChart :baby="baby" />

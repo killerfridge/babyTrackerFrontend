@@ -95,7 +95,7 @@ onMounted(()=>{
 
 <template>
 
-  <div class="w-1/2 h-80" :id="'tempchart' + baby.id"></div>
+  <div class="" :id="'tempchart' + baby.id"></div>
 
 </template>
 
