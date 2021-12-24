@@ -1,5 +1,5 @@
 <script setup>
-import {ref, computed, onMounted} from "vue";
+import {ref, computed, onMounted, onUnmounted} from "vue";
 import useState from "../state";
 import * as d3 from 'd3'
 /*import * as Plotly from 'plotly.js-dist-min'*/
@@ -19,9 +19,7 @@ const init = async () => {
 
   const plotArea = [250, 400]
   const plotAreaDiv = d3.select(`#weightChart${props.baby.id}`)
-  const svg = plotAreaDiv
-      .append('svg')
-      .attr("class", "w-full h-full")
+
 
   plotArea[0] = plotAreaDiv.node().getBoundingClientRect().height
   plotArea[1] = plotAreaDiv.node().getBoundingClientRect().width
@@ -31,12 +29,15 @@ const init = async () => {
     top: 20,
     right: 50,
     bottom: 50,
-    left: 30,
+    left: 50,
   }
 
   const innerWidth = plotArea[1] - (margin.left + margin.right)
   const innerHeight = plotArea[0] - (margin.top + margin.bottom)
-
+  const svg = plotAreaDiv
+      .append('svg')
+      .attr('class', 'w-full h-full')
+      .attr('viewBox', [0, 0, plotArea[1], plotArea[0]]);
   const render = data => {
     const parser = d3.utcParse("%Y-%m-%dT%H:%M:%S.%f%Z")
     const xData = d => Date.parse(d.created_at)
@@ -47,11 +48,6 @@ const init = async () => {
         .domain([0, d3.max(data, yData)])
         .range([innerHeight, 0])
         .nice();
-
-    console.log(parser("2021-12-23T16:08:03.888067+00:00"))
-
-    console.log(data.map(xData2))
-    console.log(data.map(x => x.created_at))
 
     const xScale = d3.scaleTime()
         .domain(d3.extent(data, xData2))
@@ -73,9 +69,9 @@ const init = async () => {
     g.append('g').call(xAxis).attr('transform', `translate(0, ${innerHeight})`)
     g.append('g').call(xAxisGrid).attr('transform', `translate(0, ${innerHeight})`).attr('class', 'gridline')
 
-    g.selectAll('.gridline').style("stroke-dasharray", "5 5")
+    g.selectAll('.gridline').style("stroke-dasharray", "5 5").attr('opacity', '0.3')
 
-    g.selectAll('circle').data(data)
+    const circles = g.selectAll('circle').data(data)
         .enter().append('circle')
         .attr('cx', d => xScale(xData(d)))
         .attr('cy', d => yScale(yData(d)))
@@ -84,6 +80,11 @@ const init = async () => {
         .attr('stroke-width', '2px')
         .attr('class', 'transition-all')
         .attr('fill', '#10B981')
+
+    const leftTitle = svg.append('g').attr('class', 'text-gray-500').append('text')
+        .text("Weight in KG")
+        .attr('transform', `translate(${margin.left - 30}, ${innerHeight / 1.3})rotate(270)`)
+        .attr('fill', 'currentColor')
   }
 
   /*const render = data => {
