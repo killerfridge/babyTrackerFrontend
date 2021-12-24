@@ -6,6 +6,13 @@ import * as d3 from 'd3'
 //import {select, scaleLinear, selectAll} from 'd3'
 
 const {url, getAuthHeader} = useState()
+const plotData = ref({
+  'data': null
+})
+
+const getPlotData = computed(()=>{
+  return plotData.value.data
+})
 
 const fullUrl = url + 'weights/' + props.baby.id + '/plot'
 
@@ -15,30 +22,35 @@ const props = defineProps(
     }
 )
 
-const init = async () => {
+const renderData = () =>{
+  render(getPlotData.value)
+}
 
-  const plotArea = [250, 400]
-  const plotAreaDiv = d3.select(`#weightChart${props.baby.id}`)
+const render = data => {
+    const plotArea = [250, 400]
+    const plotAreaDiv = d3.select(`#weightChart${props.baby.id}`)
 
 
-  plotArea[0] = plotAreaDiv.node().getBoundingClientRect().height
-  plotArea[1] = plotAreaDiv.node().getBoundingClientRect().width
-      /*.attr('height', plotArea[0])
-      .attr('width', plotArea[1])*/
-  const margin = {
-    top: 20,
-    right: 50,
-    bottom: 50,
-    left: 50,
-  }
+    plotArea[0] = plotAreaDiv.node().getBoundingClientRect().height
+    plotArea[1] = plotAreaDiv.node().getBoundingClientRect().width
+        /*.attr('height', plotArea[0])
+        .attr('width', plotArea[1])*/
+    const margin = {
+      top: 60,
+      right: 50,
+      bottom: 50,
+      left: 50,
+    }
 
-  const innerWidth = plotArea[1] - (margin.left + margin.right)
-  const innerHeight = plotArea[0] - (margin.top + margin.bottom)
-  const svg = plotAreaDiv
-      .append('svg')
-      .attr('class', 'w-full h-full')
-      .attr('viewBox', [0, 0, plotArea[1], plotArea[0]]);
-  const render = data => {
+    const innerWidth = plotArea[1] - (margin.left + margin.right)
+    const innerHeight = plotArea[0] - (margin.top + margin.bottom)
+    const svg = plotAreaDiv
+        .append('svg')
+        .attr('class', 'w-full h-full')
+        .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+        .attr('viewBox', [0, 0, plotArea[1], plotArea[0]]);
+
+
     const parser = d3.utcParse("%Y-%m-%dT%H:%M:%S.%f%Z")
     const xData = d => Date.parse(d.created_at)
     const xData2 = d => parser(d.created_at)
@@ -74,18 +86,29 @@ const init = async () => {
     const circles = g.selectAll('circle').data(data)
         .enter().append('circle')
         .attr('cx', d => xScale(xData(d)))
-        .attr('cy', d => yScale(yData(d)))
+        .attr('cy', 0)
         .attr('r', '5')
         .attr('stroke', 'steelblue')
-        .attr('stroke-width', '2px')
-        .attr('class', 'transition-all')
         .attr('fill', '#10B981')
+        .transition()
+        .duration(1000)
+        .ease(d3.easeBounce)
+        .delay((d, i)=> 1/(i+1) * 500)
+        .attr('cy', d => yScale(yData(d)))
 
-    const leftTitle = svg.append('g').attr('class', 'text-gray-500').append('text')
+    const yAxisTitle = svg.append('g').attr('class', 'text-gray-500 text-sm').append('text')
         .text("Weight in KG")
-        .attr('transform', `translate(${margin.left - 30}, ${innerHeight / 1.3})rotate(270)`)
+        .attr('transform', `translate(${margin.left - 30}, ${innerHeight /2 + margin.top + margin.bottom})rotate(270)`)
         .attr('fill', 'currentColor')
+
+    const topTitle = svg.append('g')
+        .attr('class', 'text-gray-500 text-md')
+        .append('text')
+        .text(`${props.baby.name} Weight`)
+        .attr('transform', `translate(${innerWidth/2 - margin.left/2}, ${margin.top - 15})`)
   }
+
+const init = async () => {
 
   /*const render = data => {
     const xValues = d => d.created_at
@@ -143,7 +166,8 @@ const init = async () => {
       }
   ).then(data => {
     if (data){
-      render(data)
+      plotData.value.data = data
+      renderData()
     }
     }).catch(error => console.log);
 }
