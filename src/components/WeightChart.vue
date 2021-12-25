@@ -57,7 +57,7 @@ const render = data => {
     const yData = d => d.value
 
     const yScale = d3.scaleLinear()
-        .domain([0, d3.max(data, yData)])
+        .domain(d3.extent(data, yData))
         .range([innerHeight, 0])
         .nice();
 
