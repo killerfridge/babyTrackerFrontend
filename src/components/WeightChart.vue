@@ -93,7 +93,7 @@ const render = data => {
         .transition()
         .duration(1000)
         .ease(d3.easeBounce)
-        .delay((d, i)=> 1/(i+1) * 500)
+        .delay((d, i)=> 1/(i+1) * 2000)
         .attr('cy', d => yScale(yData(d)))
 
     const yAxisTitle = svg.append('g').attr('class', 'text-gray-500 text-sm').append('text')
