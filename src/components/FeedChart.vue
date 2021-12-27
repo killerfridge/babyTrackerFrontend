@@ -40,7 +40,7 @@ function render(data){
     const margin = {
       top: 30,
       right: 50,
-      bottom: 30,
+      bottom: 50,
       left: 60,
     }
 
@@ -58,12 +58,15 @@ function render(data){
     .nice()
 
   const yAxis = d3.axisLeft(yScale)
-  const xAxis = d3.axisBottom(xScale).ticks(12, '%H:%M')
-  const xAxisGrid = d3.axisBottom(xScale).tickSize(-innerHeight).ticks(12).tickFormat('')
+  const xAxis = d3.axisBottom(xScale).ticks(d3.timeHour.every(1), '%H:%M')
+  const xAxisGrid = d3.axisBottom(xScale).tickSize(-innerHeight).ticks(d3.timeHour.every(1)).tickFormat('')
 
   const g = svg.append('g')
   g.append('g').call(yAxis).attr('transform', `translate(${margin.left - 10}, ${margin.top})`)
-  g.append('g').call(xAxis).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`)
+  const yAxisG = g.append('g').call(xAxis).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`)
+  yAxisG.selectAll('text')
+      .attr('transform', 'translate(12, 8)rotate(90)')
+      .style('text-anchor', 'start')
 
   const gridlines = g.append('g').call(xAxisGrid).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`).attr('class', 'gridline')
   g.selectAll('.gridline').style("stroke-dasharray", "5 5").attr('opacity', '0.3')
