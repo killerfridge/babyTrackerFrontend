@@ -24,10 +24,6 @@ function render(data){
   const xWidth = d => lengthParser2(lengthFormatter(lengthParser(`${Math.floor(d.feed_length)}`)) + ' +02:00')
   const xData  = d => xParser("1970-01-01 " + String(d.feed_start).slice(11, 16))
 
-  const svg = d3.select('#feedChartMain' + props.baby.id)
-      .append('svg')
-      .attr('class', 'h-full w-full')
-
   const plotAreaDiv = d3.select('#feedChartMain' + props.baby.id)
   const plotArea = {
     width: 0,
@@ -36,6 +32,12 @@ function render(data){
 
   plotArea.height = plotAreaDiv.node().getBoundingClientRect().height
   plotArea.width = plotAreaDiv.node().getBoundingClientRect().width
+
+  const svg = d3.select('#feedChartMain' + props.baby.id)
+        .append('svg')
+        .attr('class', 'h-full w-full')
+        .attr("style", "width: 100%; max-height: 100%; height: auto%;")
+        .attr('viewBox', [0, 0, plotArea.width, plotArea.height])
 
     const margin = {
       top: 30,
