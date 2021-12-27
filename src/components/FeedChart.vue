@@ -84,7 +84,7 @@ function render(data){
     .attr('height', barHeight)
     .attr('transform', `translate(${margin.left}, ${margin.top - barOffset})`)
     .attr('class', 'feed-bar')
-      .transition().delay((d, i) => i * 100).duration(1000).ease(d3.easeBounce)
+      .transition().delay((d, i) => i * 5).duration(1000).ease(d3.easeCubic)
     .attr('x', d => xScale(xData(d)))
 }
 

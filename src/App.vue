@@ -57,7 +57,7 @@ onMounted(()=>{
   color: #2c3e50;
 }
 
-rect .feed-bar{
+.feed-bar{
   fill: cornflowerblue;
   stroke: white;
   stroke-width: 2px;
@@ -65,7 +65,5 @@ rect .feed-bar{
 
 rect:hover{
   fill: #065F46;
-  stroke: white;
-  stroke-width: 2px;
 }
 </style>
