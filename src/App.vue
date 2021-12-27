@@ -56,7 +56,16 @@ onMounted(()=>{
   text-align: center;
   color: #2c3e50;
 }
+
+rect .feed-bar{
+  fill: cornflowerblue;
+  stroke: white;
+  stroke-width: 2px;
+}
+
 rect:hover{
   fill: #065F46;
+  stroke: white;
+  stroke-width: 2px;
 }
 </style>

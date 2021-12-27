@@ -1,5 +1,6 @@
 <script setup>
 import * as Plotly from 'plotly.js-dist-min'
+import * as d3 from 'd3'
 import {onMounted} from "vue";
 import useState from "../state";
 const {url, getAuthHeader} = useState()
@@ -11,8 +12,84 @@ const fullUrl = url + "feeds/" + props.baby.id + "/plot"
 const range = (start, stop, step = 1) =>
   Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
 
+function render(data){
+
+  console.log(data)
+  const yParser = d3.utcParse('%Y-%m-%d')
+  const xParser = d3.timeParse('%Y-%m-%d %H:%M')
+  const lengthParser = d3.timeParse('%s')
+  const lengthParser2 = d3.timeParse('%Y-%m-%d %H:%M:%S %Z')
+  const lengthFormatter = d3.timeFormat('%Y-%m-%d %H:%M:%S')
+
+  const yData = d => yParser(String(d.feed_start).slice(0, 10))
+  const xWidth = d => lengthParser2(lengthFormatter(lengthParser(`${Math.floor(d.feed_length)}`)) + ' +02:00')
+  const xData  = d => xParser("1970-01-01 " + String(d.feed_start).slice(11, 16))
+
+  const svg = d3.select('#feedChartMain' + props.baby.id)
+      .append('svg')
+      .attr('class', 'h-full w-full')
+
+  const plotAreaDiv = d3.select('#feedChartMain' + props.baby.id)
+  const plotArea = {
+    width: 0,
+    height: 0
+  }
+
+  plotArea.height = plotAreaDiv.node().getBoundingClientRect().height
+  plotArea.width = plotAreaDiv.node().getBoundingClientRect().width
+
+    const margin = {
+      top: 30,
+      right: 50,
+      bottom: 30,
+      left: 50,
+    }
+
+  const innerHeight = plotArea.height - (margin.top + margin.bottom)
+  const innerWidth = plotArea.width - (margin.left + margin.right)
+
+  const yScale = d3.scaleTime()
+    .domain(d3.extent(data, yData))
+    .range([innerHeight, 0])
+    .nice()
+
+  const xScale = d3.scaleTime()
+    .domain([xParser('1970-01-01 00:00'), xParser('1970-01-02 00:00')])
+    .range([0, innerWidth])
+    .nice()
+
+  const yAxis = d3.axisLeft(yScale)
+  const xAxis = d3.axisBottom(xScale).ticks(12, '%H:%M')
+  const xAxisGrid = d3.axisBottom(xScale).tickSize(-innerHeight).ticks(12).tickFormat('')
+
+  const g = svg.append('g')
+  g.append('g').call(yAxis).attr('transform', `translate(${margin.left}, ${margin.top})`)
+  g.append('g').call(xAxis).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`)
+
+  g.append('g').call(xAxisGrid).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`).attr('class', 'gridline')
+  g.selectAll('.gridline').style("stroke-dasharray", "5 5").attr('opacity', '0.3')
+
+  const barHeight = yScale(yParser('2020-01-01')) - yScale(yParser('2020-01-02'))
+  const barOffset = barHeight / 2
+
+  console.log(data.map(xWidth))
+
+  g.selectAll('rect').data(data)
+    .enter()
+    .append('rect')
+    .attr('x', -500)
+    .attr('y', d => yScale(yData(d)))
+    .attr('fill','blue')
+    .attr('width', d => xScale(xWidth(d)))
+    .attr('height', barHeight)
+    .attr('transform', `translate(${margin.left}, ${margin.top - barOffset})`)
+    .attr('class', 'feed-bar')
+      .transition().delay((d, i) => i * 100).duration(1000).ease(d3.easeBounce)
+    .attr('x', d => xScale(xData(d)))
+}
+
 const init = async () =>{
-  const render = data => {
+  /*const render = data => {
     //const xValue = d => d.feed_start
 
     function getBars(data){
@@ -48,7 +125,6 @@ const init = async () =>{
           date_end = new Date(data[i].feed_end)
         }
 
-        /*const sleep_length = data[i].sleep_length*/
         let nofeed_period = 0
         let feed_period = 0
 
@@ -151,7 +227,7 @@ const init = async () =>{
       title: "Feed Patterns"
     }
     Plotly.newPlot('feedChartMain' + props.baby.id, trace, layout, config)
-  }
+  }*/
 
   await fetch(fullUrl, {
     method: "GET",
