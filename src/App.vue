@@ -60,10 +60,12 @@ onMounted(()=>{
 .feed-bar{
   fill: cornflowerblue;
   stroke: white;
-  stroke-width: 2px;
+  stroke-width: 1px;
+  opacity: .6;
+  stroke-opacity: .8;
 }
 
 rect:hover{
-  fill: #065F46;
+  opacity: 1;
 }
 </style>

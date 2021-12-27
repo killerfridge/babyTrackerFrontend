@@ -41,7 +41,7 @@ function render(data){
       top: 30,
       right: 50,
       bottom: 30,
-      left: 50,
+      left: 60,
     }
 
   const innerHeight = plotArea.height - (margin.top + margin.bottom)
@@ -62,11 +62,12 @@ function render(data){
   const xAxisGrid = d3.axisBottom(xScale).tickSize(-innerHeight).ticks(12).tickFormat('')
 
   const g = svg.append('g')
-  g.append('g').call(yAxis).attr('transform', `translate(${margin.left}, ${margin.top})`)
+  g.append('g').call(yAxis).attr('transform', `translate(${margin.left - 10}, ${margin.top})`)
   g.append('g').call(xAxis).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`)
 
-  g.append('g').call(xAxisGrid).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`).attr('class', 'gridline')
+  const gridlines = g.append('g').call(xAxisGrid).attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`).attr('class', 'gridline')
   g.selectAll('.gridline').style("stroke-dasharray", "5 5").attr('opacity', '0.3')
+  gridlines.selectAll('path').remove()
 
   const barHeight = yScale(yParser('2020-01-01')) - yScale(yParser('2020-01-02'))
   const barOffset = barHeight / 2
@@ -74,14 +75,11 @@ function render(data){
   g.selectAll('rect').data(data)
     .enter()
     .append('rect')
-    .attr('x', -500)
     .attr('y', d => yScale(yData(d)))
-    .attr('fill','blue')
     .attr('width', d => xScale(xWidth(d)))
     .attr('height', barHeight)
     .attr('transform', `translate(${margin.left}, ${margin.top - barOffset})`)
     .attr('class', 'feed-bar')
-      .transition().delay((d, i) => i * 5).duration(500).ease(d3.easeCubic)
     .attr('x', d => xScale(xData(d)))
 }
 
