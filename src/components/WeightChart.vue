@@ -30,7 +30,6 @@ const render = data => {
     const plotArea = [250, 400]
     const plotAreaDiv = d3.select(`#weightChart${props.baby.id}`)
 
-
     plotArea[0] = plotAreaDiv.node().getBoundingClientRect().height
     plotArea[1] = plotAreaDiv.node().getBoundingClientRect().width
         /*.attr('height', plotArea[0])
@@ -83,6 +82,29 @@ const render = data => {
 
     g.selectAll('.gridline').style("stroke-dasharray", "5 5").attr('opacity', '0.3')
 
+    const tooltip = plotAreaDiv.append('div')
+        .style('opacity', 0)
+        .style('position', 'fixed')
+        .attr('class', 'bg-gray-50 border border-gray-800 p-1 rounded-md')
+
+    const mouseover = (d, i, n) =>{
+      tooltip.style('opacity', .8)
+    }
+
+    const mousemove = (d, i, n) =>{
+      console.log(i)
+      tooltip
+          .style('left', (d.x + 10) + 'px')
+          .style('top', d.y + 'px')
+          .html(`<div>${i.value} kg</div>`)
+          //.style('opacity', 1)
+    }
+
+    const mouseleave = (d, i, n) =>{
+      tooltip
+        .style('opacity', 0)
+    }
+
     const circles = g.selectAll('circle').data(data)
         .enter().append('circle')
         .attr('cx', d => xScale(xData(d)))
@@ -90,11 +112,14 @@ const render = data => {
         .attr('r', '5')
         .attr('stroke', 'steelblue')
         .attr('fill', '#10B981')
-        .transition()
+        /*.transition()
         .duration(1000)
         .ease(d3.easeBounce)
-        .delay((d, i)=> 1/(i+1) * 2000)
+        .delay((d, i)=> 1/(i+1) * 2000)*/
         .attr('cy', d => yScale(yData(d)))
+        .on('mouseover', mouseover)
+        .on('mousemove', mousemove)
+        .on('mouseleave', mouseleave)
 
     const yAxisTitle = svg.append('g').attr('class', 'text-gray-500 text-sm').append('text')
         .text("Weight in KG")
@@ -109,49 +134,6 @@ const render = data => {
   }
 
 const init = async () => {
-
-  /*const render = data => {
-    const xValues = d => d.created_at
-    const yValues = d => d.value
-
-    const trace = [{
-      x: data.map(xValues),
-      y: data.map(yValues),
-      type: 'scatter',
-      mode: 'markers',
-      marker: {size:16, opacity: 0.8},
-      hovertemplate: '<b>Weight</b>: %{y:.1f}kg<br>' +
-                      '<b>Date</b>: %{x| %b %d}',
-      name: "Weights"
-    }]
-
-    const layout = {
-      autosize: true,
-      showlegend: false,
-      yaxis:{
-        automargin: true,
-        title: 'Weight (kg)'
-      },
-      xaxis: {
-        tickformat: '%b-%d',
-        title: 'Date',
-      },
-      margin: {
-        l: 20,
-        r: 20,
-        t: 20,
-        b: 40,
-        pad: 0,
-      }
-    }
-
-    const config = {
-      displayModeBar: false,
-      responsive: true,
-    }
-
-    Plotly.newPlot(`weightChart${props.baby.id}`, trace, layout, config)
-  }*/
 
   await fetch(fullUrl, {
     method: "GET",
@@ -179,6 +161,7 @@ onMounted(()=>{
 
 <template>
     <div :id="'weightChart' + baby.id" class="rounded-md"></div>
+    <!--<div :id="'weightTooltip' + baby.id" class="rounded-md bg-gray-50 border border-gray-800 absolute"></div>!-->
 </template>
 
 <script>
