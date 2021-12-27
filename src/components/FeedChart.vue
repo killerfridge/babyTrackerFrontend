@@ -7,7 +7,7 @@ const {url, getAuthHeader} = useState()
 
 const props = defineProps({baby:Object})
 
-const fullUrl = url + "feeds/" + props.baby.id + "/plot/"
+const fullUrl = url + "feeds/" + props.baby.id + "/plot"
 
 const range = (start, stop, step = 1) =>
   Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
