@@ -7,14 +7,13 @@ const {url, getAuthHeader} = useState()
 
 const props = defineProps({baby:Object})
 
-const fullUrl = url + "feeds/" + props.baby.id + "/plot"
+const fullUrl = url + "feeds/" + props.baby.id + "/plot/"
 
 const range = (start, stop, step = 1) =>
   Array(Math.ceil((stop - start) / step)).fill(start).map((x, y) => x + y * step)
 
 function render(data){
 
-  console.log(data)
   const yParser = d3.utcParse('%Y-%m-%d')
   const xParser = d3.timeParse('%Y-%m-%d %H:%M')
   const lengthParser = d3.timeParse('%s')
@@ -71,8 +70,6 @@ function render(data){
 
   const barHeight = yScale(yParser('2020-01-01')) - yScale(yParser('2020-01-02'))
   const barOffset = barHeight / 2
-
-  console.log(data.map(xWidth))
 
   g.selectAll('rect').data(data)
     .enter()
