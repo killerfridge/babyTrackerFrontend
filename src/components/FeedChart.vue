@@ -1,5 +1,5 @@
 <script setup>
-import * as Plotly from 'plotly.js-dist-min'
+// import * as Plotly from 'plotly.js-dist-min'
 import * as d3 from 'd3'
 import {onMounted} from "vue";
 import useState from "../state";
