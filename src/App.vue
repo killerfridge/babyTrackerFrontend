@@ -65,6 +65,11 @@ onMounted(()=>{
   stroke-opacity: .8;
 }
 
+.feed-bar:hover{
+  stroke: black;
+  stroke-width: 2px;
+}
+
 rect:hover{
   opacity: 1;
 }
