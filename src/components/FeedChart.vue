@@ -20,6 +20,8 @@ function render(data){
   const lengthParser = d3.timeParse('%s')
   const lengthParser2 = d3.timeParse('%Y-%m-%d %H:%M:%S %Z')
   const lengthFormatter = d3.timeFormat('%Y-%m-%d %H:%M:%S')
+  const timeFormatter = d3.timeFormat('%b %d, %H:%M')
+  const parser = d3.utcParse("%Y-%m-%dT%H:%M:%S.%f%Z")
   const rectId = d => `feed-${props.baby.id}-${d.id}`
 
   const yData = d => yParser(String(d.feed_start).slice(0, 10))
@@ -31,7 +33,7 @@ function render(data){
   const tooltip = plotAreaDiv.append('div')
         .style('opacity', 0)
         .style('position', 'fixed')
-        .attr('class', 'bg-gray-50 border border-gray-800 p-1 rounded-md')
+        .attr('class', 'bg-gray-50 border border-gray-800 p-1 text-sm rounded-md')
 
   const mouseover = (d, i, n) =>{
     tooltip.style('opacity', 1)
@@ -45,7 +47,11 @@ function render(data){
     tooltip
       .style('left', (d.x + 5) + 'px')
       .style('top', (d.y - 30) + 'px')
-      .html(`<div>${formatLength(i.feed_length_label * 1000)} feed</div>`)
+      .html(
+          `<div>${formatLength(i.feed_length_label * 1000)} feed</div>` +
+          `<div>Start: ${timeFormatter(parser(i.feed_start_label))}</div>` +
+          `<div>End: ${timeFormatter(parser(i.feed_end_label))}</div>`
+      )
 
   }
 
