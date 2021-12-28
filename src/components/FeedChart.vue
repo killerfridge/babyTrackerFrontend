@@ -79,7 +79,7 @@ function render(data){
 
     const margin = {
       top: 30,
-      right: 50,
+      right: 10,
       bottom: 50,
       left: 60,
     }
