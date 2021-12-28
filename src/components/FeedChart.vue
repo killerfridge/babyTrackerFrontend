@@ -35,7 +35,7 @@ function render(data){
         .attr('class', 'bg-gray-50 border border-gray-800 p-1 text-sm rounded-md')
 
   const mouseover = (d, i, n) =>{
-    tooltip.style('opacity', 1)
+    tooltip.style('opacity', 1).style('display', 'block')
     g.selectAll(`#${rectId(i)}`)
       .style('opacity', .9)
       .style('stroke-width', '2px')
@@ -55,7 +55,7 @@ function render(data){
   }
 
   const mouseleave = (d, i, n) =>{
-    tooltip.style('opacity', .0).style('left', '0px').style('top', '0px')
+    tooltip.style('opacity', .0).style('left', '0px').style('top', '0px').style('display', 'none')
     g.selectAll(`#${rectId(i)}`)
       .style('opacity', .6)
       .style('stroke-width', '1px')
