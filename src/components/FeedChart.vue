@@ -1,5 +1,4 @@
 <script setup>
-// import * as Plotly from 'plotly.js-dist-min'
 import * as d3 from 'd3'
 import {onMounted} from "vue";
 import useState from "../state";
@@ -56,7 +55,7 @@ function render(data){
   }
 
   const mouseleave = (d, i, n) =>{
-    tooltip.style('opacity', .0)
+    tooltip.style('opacity', .0).style('left', '0px').style('top', '0px')
     g.selectAll(`#${rectId(i)}`)
       .style('opacity', .6)
       .style('stroke-width', '1px')
