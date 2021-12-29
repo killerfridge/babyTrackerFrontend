@@ -151,7 +151,7 @@ const render = data =>{
 
   g.append('text')
       .text(`${props.baby.name} Sleep Patterns`)
-      .attr('transform', `translate(${innerWidth / 2} ,${margin.top})`)
+      .attr('transform', `translate(${innerWidth / 2} ,${margin.top - 15})`)
       .style('text-anchor', 'start')
 }
 
