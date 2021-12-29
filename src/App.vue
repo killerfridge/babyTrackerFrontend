@@ -65,6 +65,14 @@ onMounted(()=>{
   stroke-opacity: .8;
 }
 
+.sleep-bar{
+  fill: #10B981;
+  stroke: white;
+  stroke-width: 1px;
+  opacity: .8;
+  stroke-opacity: .8;
+}
+
 .feed-bar:hover{
   stroke: black;
   stroke-width: 2px;
