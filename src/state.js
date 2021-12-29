@@ -7,11 +7,64 @@ const authHeader = ref({})
 const isSignUp = ref(false)
 const tempExpanded = ref(false)
 const loading =  ref(false)
+const plotsLoaded = ref(false)
 const babies = ref({
         'babies': []
     })
+const plotData = ref({
+    feeds: {},
+    sleeps: {},
+    weights: {},
+    temps: {},
+})
 
 export default function useState () {
+
+    const setPlotData = (key, id, value) =>{
+        plotData.value[key][id] = value
+    }
+
+    const getPlotData = computed(()=>{
+        return plotData.value
+    })
+
+    const getPlotsLoaded = computed(()=>{
+        return plotsLoaded.value
+    })
+
+    const loadPlotData = async (id) => {
+        plotsLoaded.value = false
+        const feedUrl = url + "feeds/" + id + "/plot"
+        const sleepUrl = url + "sleep/" + id + "/plot"
+        const weightUrl = url + "weights/" + id + "/plot"
+        const tempUrl = url + "temperatures/" + id + "/plot"
+
+        await fetch(feedUrl, {
+            headers: getAuthHeader.value
+        }).then(response=>response.json())
+            .then(data => setPlotData('feeds', id, data))
+            .catch(error=>console.log)
+
+        await fetch(sleepUrl, {
+            headers: getAuthHeader.value
+        }).then(response=>response.json())
+            .then(data=>setPlotData('sleeps', id, data))
+            .catch(error=>console.log)
+
+        await fetch(weightUrl, {
+            headers: getAuthHeader.value
+        }).then(response=>response.json())
+            .then(data=>setPlotData('weights', id, data))
+            .catch(error=>console.log)
+
+        await fetch(tempUrl, {
+            headers: getAuthHeader.value
+        }).then(response=>response.json())
+            .then(data=>setPlotData('temps', id, data))
+            .catch(error=>console.log)
+
+        plotsLoaded.value = true
+    }
 
     const setAuthentication = (t) =>{
         isAuthenticated.value = t
@@ -144,7 +197,11 @@ export default function useState () {
         isLoading,
         notLoading,
         addBaby,
-        setAuthentication
+        setAuthentication,
+        getPlotData,
+        setPlotData,
+        loadPlotData,
+        getPlotsLoaded
     }
 
 }

@@ -61,7 +61,7 @@ onMounted(()=>{
   fill: cornflowerblue;
   stroke: white;
   stroke-width: 1px;
-  opacity: .6;
+  opacity: .8;
   stroke-opacity: .8;
 }
 

@@ -51,13 +51,12 @@ function render(data){
           `<div>Start: ${timeFormatter(parser(i.feed_start_label))}</div>` +
           `<div>End: ${timeFormatter(parser(i.feed_end_label))}</div>`
       )
-
   }
 
   const mouseleave = (d, i, n) =>{
     tooltip.style('opacity', .0).style('left', '0px').style('top', '0px').style('display', 'none')
     g.selectAll(`#${rectId(i)}`)
-      .style('opacity', .6)
+      .style('opacity', .8)
       .style('stroke-width', '1px')
       .style('stroke', 'white')
       .style('stroke-opacity', .8)
@@ -74,8 +73,15 @@ function render(data){
   const svg = d3.select('#feedChartMain' + props.baby.id)
         .append('svg')
         .attr('class', 'h-full w-full')
-        .attr("style", "width: 100%; max-height: 100%; height: auto%;")
+        .attr("style", "width: 100%;")
         .attr('viewBox', [0, 0, plotArea.width, plotArea.height])
+
+
+  d3.select(window).on('resize', function(){
+    plotArea.height = plotAreaDiv.node().getBoundingClientRect().height
+    plotArea.width = plotAreaDiv.node().getBoundingClientRect().width
+    svg.style('height', plotArea.height)
+  })
 
     const margin = {
       top: 30,
@@ -141,6 +147,11 @@ function render(data){
     .on('mouseover', mouseover)
     .on('mousemove', mousemove)
     .on('mouseleave', mouseleave)
+
+  g.append('text')
+      .text(`${props.baby.name} Feed Patterns`)
+      .attr('transform', `translate(${innerWidth / 2} ,${margin.top})`)
+      .style('text-anchor', 'start')
 }
 
 const init = async () =>{
@@ -159,6 +170,7 @@ const init = async () =>{
       render(data)
     }
   }).catch(error => console.log)
+
   }
 
 onMounted(()=>{

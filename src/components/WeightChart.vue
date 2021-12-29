@@ -2,17 +2,9 @@
 import {ref, computed, onMounted, onUnmounted} from "vue";
 import useState from "../state";
 import * as d3 from 'd3'
-/*import * as Plotly from 'plotly.js-dist-min'*/
-//import {select, scaleLinear, selectAll} from 'd3'
+
 
 const {url, getAuthHeader} = useState()
-const plotData = ref({
-  'data': null
-})
-
-const getPlotData = computed(()=>{
-  return plotData.value.data
-})
 
 const fullUrl = url + 'weights/' + props.baby.id + '/plot'
 
@@ -21,10 +13,6 @@ const props = defineProps(
       baby: Object
     }
 )
-
-const renderData = () =>{
-  render(getPlotData.value)
-}
 
 const render = data => {
     const plotArea = [250, 400]
@@ -148,10 +136,10 @@ const init = async () => {
       }
   ).then(data => {
     if (data){
-      plotData.value.data = data
-      renderData()
+      render(data)
     }
     }).catch(error => console.log);
+
 }
 onMounted(()=>{
   init()
