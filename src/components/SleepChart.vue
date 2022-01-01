@@ -80,19 +80,23 @@ const render = data =>{
   const mousemove = (d, i, n) =>{
     const tooltipText = () =>{
       if(i.dataType==='feed'){
-        return 'feed'
+        return `<div>${formatLength(i.length_label * 1000)} feed</div>` +
+          `<div>Start: ${timeFormatter(parsers.parser(i.start_label))}</div>` +
+          `<div>End: ${timeFormatter(parsers.parser(i.end_label))}</div>`
       }else if(i.dataType==='sleep'){
-        return 'asleep'
+        return `<div>${formatLength(i.length_label * 1000)} asleep</div>` +
+          `<div>Start: ${timeFormatter(parsers.parser(i.start_label))}</div>` +
+          `<div>End: ${timeFormatter(parsers.parser(i.end_label))}</div>`
+      } else {
+        const nappy = i.dataType === 1 ? "Wet" : "Solid";
+        return `<div>${nappy} nappy</div>` +
+          `<div>At: ${timeFormatter(parsers.parser(i.start_label))}</div>`
       }
     }
     tooltip
       .style('left', (d.x + 5) + 'px')
       .style('top', (d.y - 30) + 'px')
-      .html(
-          `<div>${formatLength(i.length_label * 1000)} ${tooltipText()}</div>` +
-          `<div>Start: ${timeFormatter(parsers.parser(i.start_label))}</div>` +
-          `<div>End: ${timeFormatter(parsers.parser(i.end_label))}</div>`
-      )
+      .html(tooltipText())
   }
 
   const mouseleave = (d, i, n) =>{
