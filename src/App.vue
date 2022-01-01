@@ -61,22 +61,46 @@ onMounted(()=>{
   fill: cornflowerblue;
   stroke: white;
   stroke-width: 1px;
-  opacity: .8;
-  stroke-opacity: .8;
+  opacity: .7;
+  stroke-opacity: .2;
 }
 
 .sleep-bar{
   fill: #10B981;
   stroke: white;
   stroke-width: 1px;
-  opacity: .8;
-  stroke-opacity: .8;
+  opacity: .7;
+  stroke-opacity: .2;
 }
 
-.feed-bar:hover{
+.wee{
+  fill: palegoldenrod;
+  stroke: white;
+  stroke-width: 1px;
+  opacity: .7;
+  stroke-opacity: .2;
+}
+
+.poo{
+  fill: peru;
+  stroke: white;
+  stroke-width: 1px;
+  opacity: .7;
+  stroke-opacity: .2;
+}
+
+.weepoo{
+  fill: peru;
+  stroke: white;
+  stroke-width: 1px;
+  opacity: .7;
+  stroke-opacity: .2;
+}
+
+/*.feed-bar:hover{
   stroke: black;
   stroke-width: 2px;
-}
+}*/
 
 rect:hover{
   opacity: 1;
