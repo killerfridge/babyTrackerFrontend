@@ -226,7 +226,13 @@ const init = async () =>{
   await fetch(nappyUrl, {
     method:"GET",
     headers: getAuthHeader.value
-  }).then(response=>response.json())
+  }).then(response => {
+    if (response.status === 200){
+      return response.json()
+    } else {
+      return null
+    }
+  })
   .then(data=>{
     function dataMapper(d){
       return{
@@ -239,7 +245,9 @@ const init = async () =>{
         id: `nappy${d.id}`
       }
     }
-    data.forEach(d=>plotData.value.data.push(dataMapper(d)))
+    if (data){
+      data.forEach(d=>plotData.value.data.push(dataMapper(d)))
+    }
   }).catch(error=>console.log(error))
 
   await fetch(fullUrl, {
