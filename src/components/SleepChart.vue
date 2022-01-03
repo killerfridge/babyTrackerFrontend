@@ -17,8 +17,19 @@ const plotData = ref({
   data: [],
 })
 
+const filters = {
+  wee: true,
+  poo: true,
+  feed: true,
+  sleep: true
+}
+
 const getPlotData = computed(()=>{
   return plotData.value.data
+})
+
+const getFilters = computed(()=>{
+  return filters.value
 })
 
 
@@ -36,8 +47,25 @@ const render = data =>{
   const lengthFormatter = d3.timeFormat('%Y-%m-%d %H:%M:%S')
   const timeFormatter = d3.timeFormat('%b %d, %H:%M')
   const glyphId = d => `id-${props.baby.id}-${d.id}`
-  const sleepFeedFilter = d => d.dataType !== 1 || d.dataType !== 2 || d.dataType !== 3;
-  const nappyFilter = d => d.dataType > 0
+  const sleepFeedFilter = d => d.dataType === 'feed' || d.dataType === 'sleep'
+  const nappyFilter = d => d.dataType < 3
+
+  function filterData(data){
+    let filtData = data
+    if(!filters.feed){
+      filtData = filtData.filter(d => d.dataType !== 'feed')
+    }
+    if(!filters.sleep){
+      filtData = filtData.filter(d=>d.dataType !=='sleep')
+    }
+    if(!filters.poo){
+      filtData = filtData.filter(d=>d.dataType !==2)
+    }
+    if(!filters.wee){
+      filtData = filtData.filter(d=>d.dataType !==1)
+    }
+    return filtData
+  }
 
   const yData = d => parsers.yParser(String(d.start).slice(0, 10))
   const xWidth = d => parsers.lengthParser2(parsers.lengthFormatter(parsers.lengthParser(`${Math.floor(d.length)}`)) + ' +02:00')
@@ -179,30 +207,122 @@ const render = data =>{
   gridlines.selectAll('path').remove()
 
   const barHeight = yScale(parsers.yParser('2020-01-01')) - yScale(parsers.yParser('2020-01-02'))
-  console.log(barHeight)
-  console.log(yScale.domain())
   const barOffset = barHeight / 2
 
-  function updateRender(){
-    g.selectAll('rect').data(data.filter(sleepFeedFilter))
-    .enter()
-    .append('rect')
-    .attr('y', d => yScale(yData(d)))
-    .attr('width', d => xScale(xWidth(d)))
-    .attr('height', barHeight)
-    .attr('transform', `translate(${margin.left}, ${margin.top - barOffset})`)
-    .attr('class', d=>hueClass(d))
-    .attr('x', d => xScale(xData(d)))
-      .attr('id', glyphId)
-    .on('mouseover', mouseover)
-    .on('mousemove', mousemove)
-    .on('mouseleave', mouseleave)
-    .exit().remove()
+  const weeButton = d3.select('#weeButton')
+  const pooButton = d3.select('#pooButton')
+  const sleepButton = d3.select('#sleepButton')
+  const feedButton = d3.select('#feedButton')
 
-    g.selectAll('circle').data(data.filter(nappyFilter))
-      .enter()
-      .append('circle')
-      .attr('cx', d => xScale(xData(d)))
+  sleepButton.on('click', e=>{
+    filters.sleep = !filters.sleep
+    if(filters.sleep){
+      sleepButton.attr('class', 'selected')
+    } else {
+      sleepButton.attr('class', 'unselected')
+    }
+    updateRender(data)
+  })
+  weeButton.on('click', e=>{
+    filters.wee = !filters.wee
+    if(filters.wee){
+      weeButton.attr('class', 'selected')
+    } else {
+      weeButton.attr('class', 'unselected')
+    }
+    updateRender(data)
+  })
+  pooButton.on('click', e=>{
+    filters.poo = !filters.poo
+    if(filters.poo){
+      pooButton.attr('class', 'selected')
+    } else {
+      pooButton.attr('class', 'unselected')
+    }
+    updateRender(data)
+  })
+  feedButton.on('click', e=>{
+    filters.feed = !filters.feed
+    if(filters.feed){
+      feedButton.attr('class', 'selected')
+    } else {
+      feedButton.attr('class', 'unselected')
+    }
+    updateRender(data)
+  })
+
+  function updateRender(data){
+    const filtData = filterData(data)
+    console.log(filtData)
+    const rectData = filtData.filter(sleepFeedFilter)
+    console.log(rectData)
+    const circData = filtData.filter(nappyFilter)
+
+    const rects = g.selectAll('rect').data(rectData, (d, i)=> {
+      return `${d.id}${i}`
+    })
+        .join(
+            function(enter) {
+              return enter
+                  .append('rect')
+                  .attr('y', d => yScale(yData(d)))
+                  .attr('width', d => xScale(xWidth(d)))
+                  .attr('height', barHeight)
+                  .attr('transform', `translate(${margin.left}, ${margin.top - barOffset + 10})`)
+                  .attr('class', d => hueClass(d))
+                  .attr('x', d => xScale(xData(d)))
+                  .style('opacity', 0.0)
+                  .attr('id', glyphId)
+                  .on('mouseover', mouseover)
+                  .on('mousemove', mousemove)
+                  .on('mouseleave', mouseleave)
+                  .transition().duration(750)
+                  .attr('transform', `translate(${margin.left}, ${margin.top - barOffset})`)
+                  .style('opacity', 0.7)
+            },
+            function(update){
+              return update
+            },
+            function(exit){
+              exit.transition().duration(750)
+                  .attr('transform', `translate(${margin.left}, ${margin.top - barOffset - 10})`)
+                  .style('opacity', 0).remove()
+            }
+        )
+
+
+    const circles = g.selectAll('circle').data(circData, d=>d.id)
+      .join(
+          function(enter){
+            return enter
+                .append('circle')
+                .attr('cx', d => xScale(xData(d)))
+                .attr('cy', d=> yScale(yData(d)))
+                .attr('r', 5)
+                .style('opacity', '0')
+                .attr('transform', `translate(${margin.left}, ${margin.top + 20})`)
+                .attr('class', d=>hueClass(d))
+                .attr('id', glyphId)
+                .on('mouseover', mouseover)
+                .on('mousemove', mousemove)
+                .on('mouseleave', mouseleave)
+                .transition().duration(750).style('opacity', .7)
+                .attr('transform', `translate(${margin.left}, ${margin.top})`)
+          },
+          function(update){
+              return update
+          },
+          function(exit){
+            return exit
+                .transition()
+                .duration(750)
+                .style('opacity', 0)
+                .attr('transform', `translate(${margin.left}, ${margin.top - 20})`)
+                .remove()
+          }
+        )
+
+      /*.attr('cx', d => xScale(xData(d)))
       .attr('cy', d=> yScale(yData(d)))
       .attr('r', 5)
         .attr('transform', `translate(${margin.left}, ${margin.top})`)
@@ -211,14 +331,14 @@ const render = data =>{
         .on('mouseover', mouseover)
     .on('mousemove', mousemove)
     .on('mouseleave', mouseleave)
-      .exit().remove()
+      .exit().remove()*/
   }
 
-  updateRender()
-  g.append('text')
+  updateRender(data)
+  /*g.append('text')
       .text(`${props.baby.name} Sleep Patterns`)
       .attr('transform', `translate(${innerWidth / 2} ,${margin.top - 15})`)
-      .style('text-anchor', 'start')
+      .style('text-anchor', 'start')*/
 }
 
 const init = async () =>{
@@ -313,7 +433,15 @@ onMounted(()=>{
 </script>
 
 <template>
-  <div class="w-full h-80" :id="'sleepChartMain' + baby.id"></div>
+  <div class="w-full h-full justify-center items-center">
+    <div class="mx-auto my-auto w-full flex items-center justify-center">
+      <div id="sleepButton" class="selected">Sleep</div>
+      <div id="feedButton" class="selected">Feeds</div>
+      <div id="weeButton" class="selected">Wee</div>
+      <div id="pooButton" class="selected">Poo</div>
+    </div>
+    <div class="w-full h-80" :id="'sleepChartMain' + baby.id"></div>
+  </div>
 </template>
 
 <script>

@@ -15,9 +15,6 @@ const props = defineProps({baby:Object})
     <div class="flex">
       <SleepChart :baby="baby" />
     </div>
-    <div class="flex">
-      <FeedChart :baby="baby" />
-    </div>
 
 </template>
 

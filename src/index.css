@@ -1,3 +1,12 @@
 @tailwind utilities;
 @tailwind components;
 @tailwind base;
+
+@layer components{
+    .unselected {
+      @apply cursor-pointer rounded-md bg-gray-500 mx-2 p-3 text-white transition-all
+    }
+    .selected {
+        @apply cursor-pointer rounded-md bg-green-500 mx-2 p-3 text-white transition-all
+    }
+}
