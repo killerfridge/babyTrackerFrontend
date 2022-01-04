@@ -1,5 +1,4 @@
 import {ref, computed} from 'vue'
-import axios from "axios";
 
 const isAuthenticated = ref(false)
 const token = ref('')
